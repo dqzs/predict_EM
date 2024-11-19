@@ -1,0 +1,9 @@
+streamlit==1.30.0
+rdkit
+mordred
+numpy
+pandas
+pillow
+pyvirtualdisplay
+autogluon==0.8.1
+autogluon.tabular[all,tabpfn,vowpalwabbit,imodels,skex,skl2onnx]
