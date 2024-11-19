@@ -103,7 +103,7 @@ if submit_button and mols:
 
         # 加载 AutoGluon 模型并预测
         st.info("加载模型并进行预测，请稍候...")
-        predictor = TabularPredictor.load("ag-20240829_082340")
+        predictor = TabularPredictor.load("ag-20241119_124834")
         #predictions = predictor.predict(result_df, model="CatBoost_BAG_L1")
         predictions = predictor.predict(result_df)
 
