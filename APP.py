@@ -104,10 +104,19 @@ if submit_button and mols:
         result_df = pd.concat(molecular_descriptor, ignore_index=True)
         result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
-        # 加载 AutoGluon 模型并预测
+        # 加载 AutoGluon 模型
         st.info("加载模型并进行预测，请稍候...")
         predictor = TabularPredictor.load("ag-20241119_124834")
-        predictions = predictor.predict(result_df)
+
+        # 选择模型
+        model_options = [
+            "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "CatBoost_BAG_L1",
+            "NeuralNetTorch_BAG_L1", "LightGBMLarge_BAG_L1", "WeightedEnsemble_L2"
+        ]
+        selected_model = st.selectbox("请选择模型进行预测：", model_options)
+
+        # 预测结果
+        predictions = predictor.predict(result_df, model=selected_model)
 
         # 将预测结果保留为整数
         predictions = predictions.astype(int)
