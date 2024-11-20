@@ -2,14 +2,10 @@ import streamlit as st
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 from rdkit.Chem import AllChem
-from rdkit.Chem import Draw  # 导入绘制分子图的模块
-from rdkit.ML.Descriptors import MoleculeDescriptors
 from mordred import Calculator, descriptors
 import pandas as pd
-from warnings import simplefilter
 from autogluon.tabular import TabularPredictor
 import tempfile
-from PIL import Image
 
 # 页面标题
 st.title("预测荧光的发射波长")
@@ -74,38 +70,23 @@ if submit_button and mols:
             # 显示分子量
             mol_weight = Descriptors.MolWt(mol)
             st.write(f"分子 {i + 1} 的分子量：{mol_weight:.2f}")
-            
-            # 显示分子二维图像
-            img = Draw.MolToImage(mol, size=(300, 300))  # 生成分子的二维图像
-            st.image(img, caption=f"分子 {i + 1} 的二维结构图", use_column_width=True)
 
-        # 选择要计算的描述符列表
-        selected_descriptors = [
-            "SdsCH", "MolLogP", "SdssC", "VSA_EState7", "SlogP_VSA8",
-            "VE1_A", "EState_VSA4", "AATS8i", "AATS4i"
-        ]
-
-        # 计算所选描述符
-        st.info("正在计算所选的分子描述符，请稍候...")
+        # 计算指定的分子描述符
+        st.info("正在计算分子描述符，请稍候...")
         calc = Calculator(descriptors, ignore_3D=True)
-        
-        # 创建一个自定义描述符计算器
-        selected_descriptor_functions = [desc for desc in calc.descriptors if desc.name in selected_descriptors]
+        descriptor_names = ["SdsCH", "MolLogP", "SdssC", "VSA_EState7", 
+                            "SlogP_VSA8", "VE1_A", "EState_VSA4", "AATS8i", "AATS4i"]
 
-        # 计算这些描述符
-        descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator([desc.name for desc in selected_descriptor_functions])
-        
         Molecular_descriptor = []
         for mol in mols:
-            if mol:
-                calculated_desc = descriptor_calculator.CalcDescriptors(mol)
-                descriptor_data = {desc.name: val for desc, val in zip(selected_descriptor_functions, calculated_desc)}
-                Molecular_descriptor.append(descriptor_data)
+            mordred_df = pd.DataFrame(calc.pandas([mol]))
+            filtered_df = mordred_df[descriptor_names]
+            Molecular_descriptor.append(filtered_df)
 
-        # 转换为 DataFrame 进行展示
-        result_df = pd.DataFrame(Molecular_descriptor)
-        
-        # 加载 AutoGluon 模型并进行预测
+        # 合并所有分子的描述符数据框
+        result_df = pd.concat(Molecular_descriptor, ignore_index=True)
+
+        # 加载 AutoGluon 模型并预测
         st.info("加载模型并进行预测，请稍候...")
         predictor = TabularPredictor.load("ag-20241119_124834")
         predictions = predictor.predict(result_df)
