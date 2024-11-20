@@ -2,10 +2,13 @@ import streamlit as st
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 from rdkit.Chem import AllChem
+from rdkit.ML.Descriptors import MoleculeDescriptors
 from mordred import Calculator, descriptors
 import pandas as pd
+from warnings import simplefilter
 from autogluon.tabular import TabularPredictor
 import tempfile
+from PIL import Image
 
 # 页面标题
 st.title("预测荧光的发射波长")
@@ -71,24 +74,37 @@ if submit_button and mols:
             mol_weight = Descriptors.MolWt(mol)
             st.write(f"分子 {i + 1} 的分子量：{mol_weight:.2f}")
 
-        # 计算指定的分子描述符
+        # 计算分子描述符
         st.info("正在计算分子描述符，请稍候...")
         calc = Calculator(descriptors, ignore_3D=True)
-        descriptor_names = ["SdsCH", "MolLogP", "SdssC", "VSA_EState7", 
-                            "SlogP_VSA8", "VE1_A", "EState_VSA4", "AATS8i", "AATS4i"]
+        mordred_descriptors = [str(desc) for desc in calc.descriptors]
+        rdkit_descriptors = [desc[0] for desc in Descriptors._descList]
+
+        # 去除重复的描述符
+        for desc in mordred_descriptors:
+            if desc in rdkit_descriptors:
+                rdkit_descriptors.remove(desc)
+
+        descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_descriptors)
 
         Molecular_descriptor = []
         for mol in mols:
             mordred_df = pd.DataFrame(calc.pandas([mol]))
-            filtered_df = mordred_df[descriptor_names]
-            Molecular_descriptor.append(filtered_df)
+            rdkit_df = pd.DataFrame(
+                [descriptor_calculator.CalcDescriptors(mol)],
+                columns=rdkit_descriptors
+            )
+            combined_df = mordred_df.join(rdkit_df)
+            Molecular_descriptor.append(combined_df)
 
         # 合并所有分子的描述符数据框
         result_df = pd.concat(Molecular_descriptor, ignore_index=True)
+        result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
         # 加载 AutoGluon 模型并预测
         st.info("加载模型并进行预测，请稍候...")
         predictor = TabularPredictor.load("ag-20241119_124834")
+        #predictions = predictor.predict(result_df, model="CatBoost_BAG_L1")
         predictions = predictor.predict(result_df)
 
         # 将预测结果保留为整数
