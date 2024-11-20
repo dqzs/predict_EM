@@ -53,9 +53,13 @@ elif input_option == "SDF 文件上传":
 
             # 使用 RDKit 加载分子
             supplier = Chem.SDMolSupplier(temp_filename)
+            num_mols = len(list(supplier))  # 获取分子数量
+            st.write(f"SDF 文件包含 {num_mols} 个分子。")  # 打印分子数量
+
             for mol in supplier:
                 if mol is not None and mol not in mols:  # 检查分子是否已经被添加
                     mols.append(mol)
+                    st.write(f"分子 {mol.GetProp('_Name')} 已添加。")  # 打印分子名称
 
             if len(mols) > 0:
                 st.success(f"文件上传成功，共包含 {len(mols)} 个有效分子！")
