@@ -82,10 +82,23 @@ if submit_button and mols:
             st.write(f"分子 {i + 1} 的分子量：{mol_weight:.2f}")
 
             # 计算分子描述符
-            calc = Calculator(descriptors, ignore_3D=True)
+        st.info("正在计算分子描述符，请稍候...")
+        calc = Calculator(descriptors, ignore_3D=True)
+        mordred_description = []
+        rdkit_description = [x[0] for x in Descriptors._descList]
+        
+        # 比较和筛选描述符
+        for i in calc.descriptors:
+            mordred_description.append(i.__str__())
+        for i in mordred_description:
+            if i in rdkit_description:
+                rdkit_description.remove(i)
+
+        descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_description)
+
+        molecular_descriptor = []
+        for mol in mols:
             calculator_descript = pd.DataFrame(calc.pandas([mol]))
-            rdkit_description = [x[0] for x in Descriptors._descList]
-            descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_description)
             rdkit_descriptors = pd.DataFrame(
                 [descriptor_calculator.CalcDescriptors(mol)],
                 columns=rdkit_description
@@ -95,7 +108,6 @@ if submit_button and mols:
 
         # 合并所有分子的描述符数据框
         result_df = pd.concat(molecular_descriptor, ignore_index=True)
-        result_df = result_df.drop_duplicates()  # 去重
         result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
         # 加载 AutoGluon 模型
