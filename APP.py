@@ -4,6 +4,8 @@ from rdkit.Chem import Descriptors
 from rdkit.Chem import AllChem
 from mordred import Calculator
 import pandas as pd
+import tempfile  # 确保导入了tempfile模块
+from warnings import simplefilter
 
 # 页面标题
 st.title("预测荧光的发射波长")
