@@ -2,13 +2,8 @@ import streamlit as st
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 from rdkit.Chem import AllChem
-from rdkit.ML.Descriptors import MoleculeDescriptors
-from mordred import Calculator, descriptors
+from mordred import Calculator
 import pandas as pd
-from warnings import simplefilter
-from autogluon.tabular import TabularPredictor
-import tempfile
-from PIL import Image
 
 # 页面标题
 st.title("预测荧光的发射波长")
@@ -64,59 +59,35 @@ submit_button = st.button("提交并预测")
 # 如果点击提交按钮并且存在有效分子
 if submit_button and mols:
     try:
-        # 显示分子量
-        st.info("正在计算分子量和分子描述符...")
+        # 指定需要计算的描述符
+        required_descriptors = {
+            'SdsCH': 'SdssC', 'MolLogP': 'MolLogP', 'VSA_EState7': 'VSA_EState7',
+            'SlogP_VSA8': 'SlogP_VSA8', 'VE1_A': 'VE1_A', 'EState_VSA4': 'EState_VSA4',
+            'AATS8i': 'AATS8i', 'AATS4i': 'AATS4i'
+        }
+        calc = Calculator(required_descriptors.keys(), ignore_3D=True)
+
+        # 计算分子描述符
+        st.info("正在计算分子描述符，请稍候...")
+        Molecular_descriptor = []
         for i, mol in enumerate(mols):
             if mol is None:
                 continue
 
-            # 显示分子量
-            mol_weight = Descriptors.MolWt(mol)
-            st.write(f"分子 {i + 1} 的分子量：{mol_weight:.2f}")
+            descriptors_result = calc.pandas([mol])
+            if descriptors_result.empty:
+                st.error(f"分子 {i + 1} 的描述符计算失败。")
+                continue
 
-        # 计算分子描述符
-        st.info("正在计算分子描述符，请稍候...")
-        calc = Calculator(descriptors, ignore_3D=True)
-        mordred_descriptors = [str(desc) for desc in calc.descriptors]
-        rdkit_descriptors = [desc[0] for desc in Descriptors._descList]
-
-        # 去除重复的描述符
-        for desc in mordred_descriptors:
-            if desc in rdkit_descriptors:
-                rdkit_descriptors.remove(desc)
-
-        descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_descriptors)
-
-        Molecular_descriptor = []
-        for mol in mols:
-            mordred_df = pd.DataFrame(calc.pandas([mol]))
-            rdkit_df = pd.DataFrame(
-                [descriptor_calculator.CalcDescriptors(mol)],
-                columns=rdkit_descriptors
-            )
-            combined_df = mordred_df.join(rdkit_df)
-            Molecular_descriptor.append(combined_df)
+            descriptors_df = pd.DataFrame(descriptors_result)
+            Molecular_descriptor.append(descriptors_df)
 
         # 合并所有分子的描述符数据框
         result_df = pd.concat(Molecular_descriptor, ignore_index=True)
-        result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
-
-        # 加载 AutoGluon 模型并预测
-        st.info("加载模型并进行预测，请稍候...")
-        predictor = TabularPredictor.load("ag-20241119_124834")
-        #predictions = predictor.predict(result_df, model="CatBoost_BAG_L1")
-        predictions = predictor.predict(result_df)
-
-        # 将预测结果保留为整数
-        predictions = predictions.astype(int)
 
         # 展示结果
         st.write("预测结果：")
-        results = pd.DataFrame({
-            "分子索引": range(len(mols)),
-            "预测发射波长 (nm)": predictions
-        })
-        st.dataframe(results)
+        st.dataframe(result_df)
 
     except Exception as e:
         st.error(f"处理分子描述符或预测时发生错误: {e}")
