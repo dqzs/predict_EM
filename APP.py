@@ -5,10 +5,8 @@ from rdkit.Chem import AllChem
 from rdkit.ML.Descriptors import MoleculeDescriptors
 from mordred import Calculator, descriptors
 import pandas as pd
-from warnings import simplefilter
 from autogluon.tabular import TabularPredictor
 import tempfile
-from PIL import Image
 
 # 页面标题
 st.title("预测荧光的发射波长")
@@ -28,10 +26,13 @@ if input_option == "SMILES 输入":
             if mol:
                 # 转换为 3D 分子
                 mol = AllChem.AddHs(mol)
-                AllChem.EmbedMolecule(mol)
-                AllChem.MMFFOptimizeMolecule(mol)
-                mols.append(mol)
-                st.success("SMILES 转换成功！")
+                result = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  # 使用 ETKDG 算法
+                if result == -1:
+                    st.error("无法生成 3D 构象，请检查分子结构。")
+                else:
+                    AllChem.MMFFOptimizeMolecule(mol)
+                    mols.append(mol)
+                    st.success("SMILES 转换成功！")
             else:
                 st.error("SMILES 输入无效，请检查格式。")
         except Exception as e:
