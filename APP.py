@@ -60,7 +60,7 @@ elif input_option == "SDF 文件上传":
             for mol in supplier:
                 if mol is not None and mol not in mols:  # 检查分子是否已经被添加
                     mols.append(mol)
-                    st.write(f"分子 {mol.GetProp('temp_filename')} 已添加。")  # 打印分子名称
+                    st.write(f"分子 {mol.GetProp('temp_file.name')} 已添加。")  # 打印分子名称
 
             if len(mols) > 0:
                 st.success(f"文件上传成功，共包含 {len(mols)} 个有效分子！")
