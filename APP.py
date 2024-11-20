@@ -77,34 +77,35 @@ if submit_button and mols:
         # 计算分子描述符
         st.info("正在计算分子描述符，请稍候...")
         calc = Calculator(descriptors, ignore_3D=True)
-        mordred_descriptors = [str(desc) for desc in calc.descriptors]
-        rdkit_descriptors = [desc[0] for desc in Descriptors._descList]
+        mordred_description = []
+        rdkit_description = [x[0] for x in Descriptors._descList]
+        
+        # 比较和筛选描述符
+        for i in calc.descriptors:
+            mordred_description.append(i.__str__())
+        for i in mordred_description:
+            if i in rdkit_description:
+                rdkit_description.remove(i)
 
-        # 去除重复的描述符
-        for desc in mordred_descriptors:
-            if desc in rdkit_descriptors:
-                rdkit_descriptors.remove(desc)
+        descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_description)
 
-        descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_descriptors)
-
-        Molecular_descriptor = []
+        molecular_descriptor = []
         for mol in mols:
-            mordred_df = pd.DataFrame(calc.pandas([mol]))
-            rdkit_df = pd.DataFrame(
+            calculator_descript = pd.DataFrame(calc.pandas([mol]))
+            rdkit_descriptors = pd.DataFrame(
                 [descriptor_calculator.CalcDescriptors(mol)],
-                columns=rdkit_descriptors
+                columns=rdkit_description
             )
-            combined_df = mordred_df.join(rdkit_df)
-            Molecular_descriptor.append(combined_df)
+            combined_descript = calculator_descript.join(rdkit_descriptors)
+            molecular_descriptor.append(combined_descript)
 
         # 合并所有分子的描述符数据框
-        result_df = pd.concat(Molecular_descriptor, ignore_index=True)
+        result_df = pd.concat(molecular_descriptor, ignore_index=True)
         result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
         # 加载 AutoGluon 模型并预测
         st.info("加载模型并进行预测，请稍候...")
         predictor = TabularPredictor.load("ag-20241119_124834")
-        #predictions = predictor.predict(result_df, model="CatBoost_BAG_L1")
         predictions = predictor.predict(result_df)
 
         # 将预测结果保留为整数
