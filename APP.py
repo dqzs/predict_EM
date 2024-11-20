@@ -119,7 +119,7 @@ if submit_button and mols:
 
         for model in model_options:
             predictions = predictor.predict(result_df, model=model)
-            predictions_dict[model] = predictions.astype(int)
+            predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")  # 添加 "nm" 单位
 
         # 展示所有模型的预测结果
         st.write("所有模型的预测结果：")
