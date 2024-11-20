@@ -50,12 +50,18 @@ elif input_option == "SDF 文件上传":
 
             # 使用 RDKit 加载分子
             supplier = Chem.SDMolSupplier(temp_filename)
-            mols += [mol for mol in supplier if mol is not None]
 
-            if len(mols) > 0:
-                st.success(f"文件上传成功，共包含 {len(mols)} 个有效分子！")
+            # 只取第一个有效分子（强行处理为一个分子）
+            mol = None
+            for molecule in supplier:
+                if molecule is not None:
+                    mol = molecule
+                    break  # 强行选择第一个有效分子
+            if mol:
+                mols.append(mol)
+                st.success("文件上传成功，已选择一个有效分子！")
             else:
-                st.error("SDF 文件未包含有效分子！")
+                st.error("SDF 文件中没有有效分子！")
         except Exception as e:
             st.error(f"处理 SDF 文件时发生错误: {e}")
 
@@ -104,29 +110,36 @@ if submit_button and mols:
         result_df = pd.concat(molecular_descriptor, ignore_index=True)
         result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
-        # 加载 AutoGluon 模型
+        # 加载 AutoGluon 模型并预测
         st.info("加载模型并进行预测，请稍候...")
         predictor = TabularPredictor.load("ag-20241119_124834")
+        predictions = predictor.predict(result_df)
 
-        # 定义所有模型名称
-        model_options = [
+        # 打印所有模型的预测
+        model_names = [
             "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "CatBoost_BAG_L1",
             "NeuralNetTorch_BAG_L1", "LightGBMLarge_BAG_L1", "WeightedEnsemble_L2"
         ]
+        
+        for model_name in model_names:
+            model_prediction = predictor.leaderboard(result_df, silent=True).loc[
+                predictor.leaderboard(result_df, silent=True)['model'] == model_name, 'score'
+            ]
+            if not model_prediction.empty:
+                st.write(f"{model_name} 预测结果: {model_prediction.values[0]} nm")
+            else:
+                st.write(f"{model_name} 没有可用的预测结果。")
 
-        # 存储每个模型的预测结果
-        predictions_dict = {}
+        # 将预测结果保留为整数
+        predictions = predictions.astype(int)
 
-        for model in model_options:
-            predictions = predictor.predict(result_df, model=model)
-            predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")  # 添加 "nm" 单位
-
-        # 展示所有模型的预测结果
-        st.write("所有模型的预测结果：")
-        results_df = pd.DataFrame(predictions_dict)
-        results_df["分子索引"] = range(len(mols))
-        results_df = results_df[["分子索引"] + model_options]
-        st.dataframe(results_df)
+        # 展示结果
+        st.write("预测结果：")
+        results = pd.DataFrame({
+            "分子索引": range(len(mols)),
+            "预测发射波长 (nm)": predictions
+        })
+        st.dataframe(results)
 
     except Exception as e:
         st.error(f"处理分子描述符或预测时发生错误: {e}")
