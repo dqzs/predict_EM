@@ -31,8 +31,11 @@ if input_option == "SMILES 输入":
                     st.error("无法生成 3D 构象，请检查分子结构。")
                 else:
                     AllChem.MMFFOptimizeMolecule(mol)
-                    mols.append(mol)
-                    st.success("SMILES 转换成功！")
+                    if mol not in mols:  # 检查分子是否已经被添加
+                        mols.append(mol)
+                        st.success("SMILES 转换成功！")
+                    else:
+                        st.warning("分子已存在，跳过添加。")
             else:
                 st.error("SMILES 输入无效，请检查格式。")
         except Exception as e:
@@ -50,7 +53,9 @@ elif input_option == "SDF 文件上传":
 
             # 使用 RDKit 加载分子
             supplier = Chem.SDMolSupplier(temp_filename)
-            mols += [mol for mol in supplier if mol is not None]
+            for mol in supplier:
+                if mol is not None and mol not in mols:  # 检查分子是否已经被添加
+                    mols.append(mol)
 
             if len(mols) > 0:
                 st.success(f"文件上传成功，共包含 {len(mols)} 个有效分子！")
@@ -67,6 +72,7 @@ if submit_button and mols:
     try:
         # 显示分子量
         st.info("正在计算分子量和分子描述符...")
+        molecular_descriptor = []
         for i, mol in enumerate(mols):
             if mol is None:
                 continue
@@ -75,24 +81,11 @@ if submit_button and mols:
             mol_weight = Descriptors.MolWt(mol)
             st.write(f"分子 {i + 1} 的分子量：{mol_weight:.2f}")
 
-        # 计算分子描述符
-        st.info("正在计算分子描述符，请稍候...")
-        calc = Calculator(descriptors, ignore_3D=True)
-        mordred_description = []
-        rdkit_description = [x[0] for x in Descriptors._descList]
-        
-        # 比较和筛选描述符
-        for i in calc.descriptors:
-            mordred_description.append(i.__str__())
-        for i in mordred_description:
-            if i in rdkit_description:
-                rdkit_description.remove(i)
-
-        descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_description)
-
-        molecular_descriptor = []
-        for mol in mols:
+            # 计算分子描述符
+            calc = Calculator(descriptors, ignore_3D=True)
             calculator_descript = pd.DataFrame(calc.pandas([mol]))
+            rdkit_description = [x[0] for x in Descriptors._descList]
+            descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_description)
             rdkit_descriptors = pd.DataFrame(
                 [descriptor_calculator.CalcDescriptors(mol)],
                 columns=rdkit_description
@@ -102,6 +95,7 @@ if submit_button and mols:
 
         # 合并所有分子的描述符数据框
         result_df = pd.concat(molecular_descriptor, ignore_index=True)
+        result_df = result_df.drop_duplicates()  # 去重
         result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
         # 加载 AutoGluon 模型
