@@ -108,26 +108,25 @@ if submit_button and mols:
         st.info("加载模型并进行预测，请稍候...")
         predictor = TabularPredictor.load("ag-20241119_124834")
 
-        # 选择模型
+        # 定义所有模型名称
         model_options = [
             "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "CatBoost_BAG_L1",
             "NeuralNetTorch_BAG_L1", "LightGBMLarge_BAG_L1", "WeightedEnsemble_L2"
         ]
-        selected_model = st.selectbox("请选择模型进行预测：", model_options)
 
-        # 预测结果
-        predictions = predictor.predict(result_df, model=selected_model)
+        # 存储每个模型的预测结果
+        predictions_dict = {}
 
-        # 将预测结果保留为整数
-        predictions = predictions.astype(int)
+        for model in model_options:
+            predictions = predictor.predict(result_df, model=model)
+            predictions_dict[model] = predictions.astype(int)
 
-        # 展示结果
-        st.write("预测结果：")
-        results = pd.DataFrame({
-            "分子索引": range(len(mols)),
-            "预测发射波长 (nm)": predictions
-        })
-        st.dataframe(results)
+        # 展示所有模型的预测结果
+        st.write("所有模型的预测结果：")
+        results_df = pd.DataFrame(predictions_dict)
+        results_df["分子索引"] = range(len(mols))
+        results_df = results_df[["分子索引"] + model_options]
+        st.dataframe(results_df)
 
     except Exception as e:
         st.error(f"处理分子描述符或预测时发生错误: {e}")
