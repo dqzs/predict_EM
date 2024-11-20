@@ -4,7 +4,7 @@ from rdkit.Chem import Descriptors
 from rdkit.Chem import AllChem
 from mordred import Calculator
 import pandas as pd
-import tempfile  # 确保导入了tempfile模块
+import tempfile
 from warnings import simplefilter
 
 # 页面标题
@@ -62,12 +62,8 @@ submit_button = st.button("提交并预测")
 if submit_button and mols:
     try:
         # 指定需要计算的描述符
-        required_descriptors = {
-            'SdsCH': 'SdssC', 'MolLogP': 'MolLogP', 'VSA_EState7': 'VSA_EState7',
-            'SlogP_VSA8': 'SlogP_VSA8', 'VE1_A': 'VE1_A', 'EState_VSA4': 'EState_VSA4',
-            'AATS8i': 'AATS8i', 'AATS4i': 'AATS4i'
-        }
-        calc = Calculator(required_descriptors.keys(), ignore_3D=True)
+        required_descriptors = ['SdsCH', 'MolLogP', 'VSA_EState7', 'SlogP_VSA8', 'VE1_A', 'EState_VSA4', 'AATS8i', 'AATS4i']
+        calc = Calculator(required_descriptors, ignore_3D=True)
 
         # 计算分子描述符
         st.info("正在计算分子描述符，请稍候...")
@@ -76,13 +72,14 @@ if submit_button and mols:
             if mol is None:
                 continue
 
-            descriptors_result = calc.pandas([mol])
-            if descriptors_result.empty:
-                st.error(f"分子 {i + 1} 的描述符计算失败。")
-                continue
-
-            descriptors_df = pd.DataFrame(descriptors_result)
-            Molecular_descriptor.append(descriptors_df)
+            try:
+                descriptors_result = calc.pandas([mol])
+                if descriptors_result.empty:
+                    raise ValueError(f"分子 {i + 1} 的描述符计算失败。")
+                descriptors_df = pd.DataFrame(descriptors_result)
+                Molecular_descriptor.append(descriptors_df)
+            except Exception as e:
+                st.error(f"分子 {i + 1} 的描述符计算错误: {e}")
 
         # 合并所有分子的描述符数据框
         result_df = pd.concat(Molecular_descriptor, ignore_index=True)
@@ -93,3 +90,6 @@ if submit_button and mols:
 
     except Exception as e:
         st.error(f"处理分子描述符或预测时发生错误: {e}")
+        # 打印出完整的错误堆栈
+        import traceback
+        st.text(traceback.format_exc())
