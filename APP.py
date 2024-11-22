@@ -12,8 +12,8 @@ import tempfile
 st.markdown(
     """
     <div style='text-align: center;'>
-        <h1>Predict Fluorescence Emission Wavelengths</h1>
-        #<h3 style='color: #FF6347;'>Emission Wavelength Prediction Based on Molecular Structure</h3>
+        <h1>Prediction of fluorescence emission λem based on molecular structure</h1>
+        
         <blockquote style='margin: auto; width: 70%; background: #f9f9f9; border-left: 10px solid #ccc; padding: 10px; font-size: 1.1em;'>
             This tool aims to quickly predict the emission wavelengths of molecules based on their structures (SMILES or SDF files) using molecular descriptors and machine learning models.
         </blockquote>
