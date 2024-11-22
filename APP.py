@@ -177,15 +177,19 @@ if submit_button and mols:
                 "NeuralNetTorch_BAG_L1", "LightGBMLarge_BAG_L1", "WeightedEnsemble_L2"
             ]
 
+            # 预测结果存储字典
             predictions_dict = {}
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
 
+            # 将预测结果转换为DataFrame，每个模型的预测结果为一列
+            results_df = pd.DataFrame(predictions_dict).T  # 转置DataFrame，使得模型为列，分子为行
+            results_df.reset_index(inplace=True)  # 重置索引，使得分子索引成为一列
+            results_df.rename(columns={'index': 'Molecule Index'}, inplace=True)  # 重命名索引列
+
             st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
             st.write("Prediction results from all models:")
-            results_df = pd.DataFrame(predictions_dict)
-            results_df["Molecule Index"] = range(len(mols))
             st.dataframe(results_df.style.set_table_styles(
                 [{'selector': 'thead th', 'props': 'text-align: center;'},
                  {'selector': 'tbody td', 'props': 'text-align: center;'}]
