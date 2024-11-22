@@ -22,7 +22,6 @@ st.markdown(
 
 # 提供两种输入方式
 input_option = st.radio("Choose input method:", ("SMILES Input", "SDF File Upload"))
-
 mols = []  # List to store processed molecules
 
 # **SMILES 输入**
@@ -60,18 +59,17 @@ elif input_option == "SDF File Upload":
                 temp_file.write(uploaded_file.getbuffer())
                 temp_filename = temp_file.name
 
-            # Load molecules using RDKit
+            # Load the single molecule from the SDF file using RDKit
             supplier = Chem.SDMolSupplier(temp_filename)
-            valid_mols = [mol for mol in supplier if mol is not None and mol.GetNumAtoms() > 0]  # Filter valid molecules
-
-            st.write(f"The SDF file contains {len(valid_mols)} valid molecules.")  # Display valid molecule count
-
-            mols = valid_mols  # Update mols list with valid molecules
+            for mol in supplier:
+                if mol is not None:
+                    mols.append(mol)
+                    break  # Since we assume only one molecule per file
 
             if len(mols) > 0:
-                st.success(f"File uploaded successfully, containing {len(mols)} valid molecules!")
+                st.success("File uploaded successfully, containing 1 valid molecule!")
             else:
-                st.error("No valid molecules found in the SDF file!")
+                st.error("No valid molecule found in the SDF file!")
         except Exception as e:
             st.error(f"An error occurred while processing the SDF file: {e}")
 
