@@ -33,8 +33,9 @@ if input_option == "SMILES Input":
             mol = Chem.MolFromSmiles(smiles)
             if mol:
                 # Convert to 3D molecule
-                mol = AllChem.AddHs(mol)
-                mols = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  # Use ETKDG algorithm
+                AllChem.AddHs(mol)
+                AllChem.EmbedMolecule(mol)  # Use ETKDG algorithm
+                mols.append(mol)
                
             else:
                 st.error("Invalid SMILES input. Please check the format.")
