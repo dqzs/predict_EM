@@ -54,28 +54,17 @@ elif input_option == "SDF 文件上传":
 
             # 使用 RDKit 加载分子
             supplier = Chem.SDMolSupplier(temp_filename)
-            sdf_mols = list(supplier)  # 将 SDF 文件的分子转为列表以便统计和检查
-            num_mols_in_sdf = len(sdf_mols)  # SDF 文件中的分子总数
+            valid_mols = [mol for mol in supplier if mol is not None and mol.GetNumAtoms() > 0]  # Filter valid molecules
+            st.write(f"The SDF file contains {len(valid_mols)} valid molecules.")  # Display valid molecule count
+            
+            mols = valid_mols  # Update mols list with valid molecules
 
-            valid_mols = []  # 用于存储有效分子
-            invalid_count = 0  # 无效分子计数
-
-            for mol in sdf_mols:
-                if mol is not None:  # 检查分子有效性
-                    valid_mols.append(mol)
-                else:
-                    invalid_count += 1
-
-            # 将有效分子添加到全局列表 mols
-            mols.extend(valid_mols)
-
-            # 显示结果
-            if num_mols_in_sdf == len(valid_mols):
-                st.success(f"文件上传成功，共包含 {len(valid_mols)} 个分子，全部有效！")
+            if len(mols) > 0:
+                st.success(f"File uploaded successfully, containing {len(mols)} valid molecules!")
             else:
-                st.warning(f"文件上传成功，SDF 包含 {num_mols_in_sdf} 个分子，其中 {len(valid_mols)} 个有效，{invalid_count} 个无效！")
+                st.error("No valid molecules found in the SDF file!")
         except Exception as e:
-            st.error(f"处理 SDF 文件时发生错误: {e}")
+            st.error(f"An error occurred while processing the SDF file: {e}")
 
 # 添加提交按钮
 submit_button = st.button("提交并预测", key="predict_button")
