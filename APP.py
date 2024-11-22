@@ -8,67 +8,6 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 自定义CSS样式
-CUSTOM_CSS = """
-    <style>
-        .stApp {
-            border-radius: 15px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 90%;
-            margin: auto;
-            overflow: hidden;
-            background-color: #fff;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-        }
-        p {
-            text-align: justify;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border: none;
-            border-radius: 8px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .stError {
-            color: red;
-        }
-        .stWarning {
-            color: orange;
-        }
-        .stSuccess {
-            color: green;
-        }
-        .stInfo {
-            color: blue;
-        }
-    </style>
-"""
-
-# 将自定义CSS添加到Streamlit页面
-st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
-
 # 页面标题及说明
 st.markdown(
     """
@@ -100,7 +39,7 @@ if input_option == "SMILES Input":
             mol = Chem.MolFromSmiles(smiles)
             if mol:
                 mol = AllChem.AddHs(mol)
-                result = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  
+                result = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  # 使用 ETKDG 算法生成 3D 结构
                 if result == -1:
                     st.error("Failed to generate 3D conformation. Please check the molecular structure.")
                 else:
@@ -145,6 +84,14 @@ if submit_button and mols:
     with st.spinner("Calculating molecular descriptors and making predictions..."):
         try:
             st.info("Calculating molecular weights and descriptors...")
+            molecular_descriptor = []
+            for i, mol in enumerate(mols):
+                if mol is None:
+                    continue
+                mol_weight = Descriptors.MolWt(mol)
+                st.write(f"Molecule {i + 1} Molecular Weight: {mol_weight:.2f} g/mol")
+
+            st.info("Calculating molecular descriptors, please wait...")
             calc = Calculator(descriptors, ignore_3D=True)
             descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator([x[0] for x in Descriptors._descList])
 
@@ -155,15 +102,7 @@ if submit_button and mols:
                     [descriptor_calculator.CalcDescriptors(mol)],
                     columns=descriptor_calculator.GetDescriptorNames()
                 )
-                
-                # 找出重叠的列名
-                overlapping_columns = set(mordred_descriptors.columns).intersection(rdkit_descriptors.columns)
-                
-                # 删除Mordred描述符中的重叠列
-                mordred_descriptors = mordred_descriptors.drop(columns=list(overlapping_columns))
-
-                # 合并描述符，此时只包含非重叠的Mordred描述符和Rdkit描述符
-                combined_descriptors = pd.concat([mordred_descriptors, rdkit_descriptors], axis=1)
+                combined_descriptors = mordred_descriptors.join(rdkit_descriptors)
                 molecular_descriptor.append(combined_descriptors)
 
             result_df = pd.concat(molecular_descriptor, ignore_index=True)
@@ -178,16 +117,13 @@ if submit_button and mols:
 
             predictions_dict = {}
             for model in model_options:
-                predictions = predictor.predict(result_df)
+                predictions = predictor.predict(result_df, model=model)
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
-
-            # 将预测结果转换为DataFrame，每个模型的预测结果为一列
-            results_df = pd.DataFrame(predictions_dict).T  # 转置DataFrame，使得模型为列，分子为行
-            results_df.reset_index(inplace=True)  # 重置索引，使得分子索引成为一列
-            results_df.rename(columns={'index': 'Molecule Index'}, inplace=True)  # 重命名索引列
 
             st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
             st.write("Prediction results from all models:")
+            results_df = pd.DataFrame(predictions_dict)
+            results_df["Molecule Index"] = range(len(mols))
             st.dataframe(results_df.style.set_table_styles(
                 [{'selector': 'thead th', 'props': 'text-align: center;'},
                  {'selector': 'tbody td', 'props': 'text-align: center;'}]
