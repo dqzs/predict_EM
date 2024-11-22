@@ -14,7 +14,7 @@ CUSTOM_CSS = """
         .stApp {
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 80%;
+            max-width: 90%;
             margin: auto;
             overflow: hidden;
             background-color: #fff;
