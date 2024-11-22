@@ -6,6 +6,7 @@ from mordred import Calculator, descriptors
 import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
+import os
 
 # 页面标题
 st.markdown(
