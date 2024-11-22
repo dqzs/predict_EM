@@ -144,11 +144,10 @@ submit_button = st.button("Submit and Predict", key="predict_button")
 if submit_button and mols:
     with st.spinner("Calculating molecular descriptors and making predictions..."):
         try:
-            # 计算分子描述符
-            st.info("Calculating molecular descriptors, please wait...")
+            st.info("Calculating molecular weights and descriptors...")
             calc = Calculator(descriptors, ignore_3D=True)
             descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator([x[0] for x in Descriptors._descList])
-            
+
             molecular_descriptor = []
             for mol in mols:
                 mordred_descriptors = pd.DataFrame(calc.pandas([mol]))
@@ -162,11 +161,11 @@ if submit_button and mols:
                 
                 # 删除Mordred描述符中的重叠列
                 mordred_descriptors = mordred_descriptors.drop(columns=list(overlapping_columns))
-            
+
                 # 合并描述符，此时只包含非重叠的Mordred描述符和Rdkit描述符
                 combined_descriptors = pd.concat([mordred_descriptors, rdkit_descriptors], axis=1)
                 molecular_descriptor.append(combined_descriptors)
-            
+
             result_df = pd.concat(molecular_descriptor, ignore_index=True)
             result_df = result_df.dropna(axis=1, how="any")
 
@@ -177,10 +176,9 @@ if submit_button and mols:
                 "NeuralNetTorch_BAG_L1", "LightGBMLarge_BAG_L1", "WeightedEnsemble_L2"
             ]
 
-            # 预测结果存储字典
             predictions_dict = {}
             for model in model_options:
-                predictions = predictor.predict(result_df, model=model)
+                predictions = predictor.predict(result_df)
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
 
             # 将预测结果转换为DataFrame，每个模型的预测结果为一列
