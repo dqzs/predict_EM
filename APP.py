@@ -43,29 +43,40 @@ if input_option == "SMILES 输入":
             st.error(f"处理 SMILES 时发生错误: {e}")
 
 # **SDF 文件上传**
-elif input_option == "SDF File Upload":
-    uploaded_file = st.file_uploader("Upload an SDF file", type=["sdf"])
+elif input_option == "SDF 文件上传":
+    uploaded_file = st.file_uploader("请上传一个 SDF 文件", type=["sdf"])
     if uploaded_file:
         try:
-            st.info("Processing SDF file...")
+            st.info("正在处理 SDF 文件...")
             with tempfile.NamedTemporaryFile(delete=False, suffix=".sdf") as temp_file:
                 temp_file.write(uploaded_file.getbuffer())
                 temp_filename = temp_file.name
 
-            # Load molecules using RDKit
+            # 使用 RDKit 加载分子
             supplier = Chem.SDMolSupplier(temp_filename)
-            valid_mols = [mol for mol in supplier if mol is not None and mol.GetNumAtoms() > 0]  # Filter valid molecules
+            sdf_mols = list(supplier)  # 将 SDF 文件的分子转为列表以便统计和检查
+            num_mols_in_sdf = len(sdf_mols)  # SDF 文件中的分子总数
 
-            st.write(f"The SDF file contains {len(valid_mols)} valid molecules.")  # Display valid molecule count
+            valid_mols = []  # 用于存储有效分子
+            invalid_count = 0  # 无效分子计数
 
-            mols = valid_mols  # Update mols list with valid molecules
+            for mol in sdf_mols:
+                if mol is not None:  # 检查分子有效性
+                    valid_mols.append(mol)
+                else:
+                    invalid_count += 1
 
-            if len(mols) > 0:
-                st.success(f"File uploaded successfully, containing {len(mols)} valid molecules!")
+            # 将有效分子添加到全局列表 mols
+            mols.extend(valid_mols)
+
+            # 显示结果
+            if num_mols_in_sdf == len(valid_mols):
+                st.success(f"文件上传成功，共包含 {len(valid_mols)} 个分子，全部有效！")
             else:
-                st.error("No valid molecules found in the SDF file!")
+                st.warning(f"文件上传成功，SDF 包含 {num_mols_in_sdf} 个分子，其中 {len(valid_mols)} 个有效，{invalid_count} 个无效！")
         except Exception as e:
-            st.error(f"An error occurred while processing the SDF file: {e}")
+            st.error(f"处理 SDF 文件时发生错误: {e}")
+
 # 添加提交按钮
 submit_button = st.button("提交并预测", key="predict_button")
 
