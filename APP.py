@@ -49,15 +49,6 @@ if input_option == "SMILES Input":
                 # Convert to 3D molecule
                 mol = AllChem.AddHs(mol)
                 result = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  # Use ETKDG algorithm
-                if result == -1:
-                    st.error("Failed to generate 3D conformation. Please check the molecular structure.")
-                else:
-                    AllChem.MMFFOptimizeMolecule(mol)
-                    if mol not in mols:  # Check if molecule is already added
-                        mols.append(mol)
-                        st.success("SMILES converted successfully!")
-                    else:
-                        st.warning("Molecule already exists. Skipping.")
             else:
                 st.error("Invalid SMILES input. Please check the format.")
         except Exception as e:
