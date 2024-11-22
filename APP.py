@@ -1,7 +1,6 @@
 import streamlit as st
 from rdkit import Chem
-from rdkit.Chem import Descriptors
-from rdkit.Chem import AllChem
+from rdkit.Chem import Descriptors, AllChem
 from rdkit.ML.Descriptors import MoleculeDescriptors
 from mordred import Calculator, descriptors
 import pandas as pd
@@ -63,12 +62,11 @@ elif input_option == "SDF File Upload":
 
             # Load molecules using RDKit
             supplier = Chem.SDMolSupplier(temp_filename)
-            num_mols = len(list(supplier))  # Count molecules
-            st.write(f"The SDF file contains {num_mols} molecules.")  # Display molecule count
+            valid_mols = [mol for mol in supplier if mol is not None and mol.GetNumAtoms() > 0]  # Filter valid molecules
 
-            for mol in supplier:
-                if mol is not None and mol not in mols:  # Check if molecule is already added
-                    mols.append(mol)
+            st.write(f"The SDF file contains {len(valid_mols)} valid molecules.")  # Display valid molecule count
+
+            mols = valid_mols  # Update mols list with valid molecules
 
             if len(mols) > 0:
                 st.success(f"File uploaded successfully, containing {len(mols)} valid molecules!")
