@@ -11,7 +11,7 @@ import tempfile
 st.markdown(
     """
     <div style='text-align: center;'>
-        <h1>Predict Fluorescence Emission Wavelengths</h1>
+        <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
         <blockquote style='margin: auto; width: 90%; background: #f9f9f9; border-left: 0px solid #ccc; padding: 10px; font-size: 1.1em;'>
              The site aims to quickly predict the λem of a molecule based on its structure (SMILES or SDF file) using molecular descriptors and machine learning models. It is recommended to use ChemDraw software to draw the molecule and convert it to sdf.
         </blockquote>
