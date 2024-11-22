@@ -144,18 +144,11 @@ submit_button = st.button("Submit and Predict", key="predict_button")
 if submit_button and mols:
     with st.spinner("Calculating molecular descriptors and making predictions..."):
         try:
-            st.info("Calculating molecular weights and descriptors...")
-            molecular_descriptor = []
-            for i, mol in enumerate(mols):
-                if mol is None:
-                    continue
-                mol_weight = Descriptors.MolWt(mol)
-                st.write(f"Molecule {i + 1} Molecular Weight: {mol_weight:.2f} g/mol")
-
+            # 计算分子描述符
             st.info("Calculating molecular descriptors, please wait...")
             calc = Calculator(descriptors, ignore_3D=True)
             descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator([x[0] for x in Descriptors._descList])
-
+            
             molecular_descriptor = []
             for mol in mols:
                 mordred_descriptors = pd.DataFrame(calc.pandas([mol]))
@@ -163,9 +156,17 @@ if submit_button and mols:
                     [descriptor_calculator.CalcDescriptors(mol)],
                     columns=descriptor_calculator.GetDescriptorNames()
                 )
-                combined_descriptors = mordred_descriptors.join(rdkit_descriptors)
+                
+                # 找出重叠的列名
+                overlapping_columns = set(mordred_descriptors.columns).intersection(rdkit_descriptors.columns)
+                
+                # 删除Mordred描述符中的重叠列
+                mordred_descriptors = mordred_descriptors.drop(columns=list(overlapping_columns))
+            
+                # 合并描述符，此时只包含非重叠的Mordred描述符和Rdkit描述符
+                combined_descriptors = pd.concat([mordred_descriptors, rdkit_descriptors], axis=1)
                 molecular_descriptor.append(combined_descriptors)
-
+            
             result_df = pd.concat(molecular_descriptor, ignore_index=True)
             result_df = result_df.dropna(axis=1, how="any")
 
