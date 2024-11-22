@@ -1,12 +1,12 @@
 import streamlit as st
 from rdkit import Chem
-from rdkit.Chem import AllChem, Descriptors
-from rdkit.Chem import PandasTools
-import pandas as pd
-import tempfile
-from rdkit.Chem import MoleculeDescriptors
+from rdkit.Chem import Descriptors
+from rdkit.Chem import AllChem
+from rdkit.ML.Descriptors import MoleculeDescriptors
 from mordred import Calculator, descriptors
+import pandas as pd
 from autogluon.tabular import TabularPredictor
+import tempfile
 
 # 外层大边框容器
 st.markdown(
