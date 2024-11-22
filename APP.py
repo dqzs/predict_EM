@@ -13,7 +13,7 @@ st.markdown(
     <style>
     div.row-widget.stRadio > div{ 
         border-radius: 10px; /* 设置圆角边框的半径 */
-        background-color: #f9f9f9; /* 设置背景颜色 */
+        background-color: #ffffff; /* 设置背景颜色 */
         padding: 20px; /* 设置内边距 */
     }
     </style>
