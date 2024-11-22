@@ -54,18 +54,26 @@ elif input_option == "SDF 文件上传":
 
             # 使用 RDKit 加载分子
             supplier = Chem.SDMolSupplier(temp_filename)
-            num_mols = len(list(supplier))  # 获取分子数量
-            st.write(f"SDF 文件包含 {num_mols} 个分子。")  # 打印分子数量
+            sdf_mols = list(supplier)  # 将 SDF 文件的分子转为列表以便统计和检查
+            num_mols_in_sdf = len(sdf_mols)  # SDF 文件中的分子总数
 
-            for mol in supplier:
-                if mol is not None and mol not in mols:  # 检查分子是否已经被添加
-                    mols.append(mol)
-                    #st.write(f"分子 {mol.GetProp('temp_file.name')} 已添加。")  # 打印分子名称
+            valid_mols = []  # 用于存储有效分子
+            invalid_count = 0  # 无效分子计数
 
-            if len(mols) > 0:
-                st.success(f"文件上传成功，共包含 {len(mols)} 个有效分子！")
+            for mol in sdf_mols:
+                if mol is not None:  # 检查分子有效性
+                    valid_mols.append(mol)
+                else:
+                    invalid_count += 1
+
+            # 将有效分子添加到全局列表 mols
+            mols.extend(valid_mols)
+
+            # 显示结果
+            if num_mols_in_sdf == len(valid_mols):
+                st.success(f"文件上传成功，共包含 {len(valid_mols)} 个分子，全部有效！")
             else:
-                st.error("SDF 文件未包含有效分子！")
+                st.warning(f"文件上传成功，SDF 包含 {num_mols_in_sdf} 个分子，其中 {len(valid_mols)} 个有效，{invalid_count} 个无效！")
         except Exception as e:
             st.error(f"处理 SDF 文件时发生错误: {e}")
 
