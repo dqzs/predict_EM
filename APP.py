@@ -7,6 +7,20 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
+# 添加 CSS 样式以创建圆角边框
+st.markdown(
+    """
+    <style>
+    div.row-widget.stRadio > div{ 
+        border-radius: 10px; /* 设置圆角边框的半径 */
+        background-color: #f9f9f9; /* 设置背景颜色 */
+        padding: 20px; /* 设置内边距 */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # 页面标题
 st.markdown(
     """
