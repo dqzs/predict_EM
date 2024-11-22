@@ -11,13 +11,10 @@ import tempfile
 st.markdown(
     """
     <style>
-    .stApp {
-        border-radius: 10px;
-        background-color: white;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        max-width: 100%;
-        margin: auto;
+    div.row-widget.stRadio > div{ 
+        border-radius: 10px; /* 设置圆角边框的半径 */
+        background-color: #f9f9f9; /* 设置背景颜色 */
+        padding: 20px; /* 设置内边距 */
     }
     </style>
     """,
@@ -37,37 +34,34 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 将整个应用内容包裹在一个 div 中，并应用 stApp 类
-col1, col2 = st.columns(2)
-with col1:
-    # 提供两种输入方式
-    input_option = st.radio("Choose input method:", ("SMILES Input", "SDF File Upload"))
-    mols = []  # List to store processed molecules
+# 提供两种输入方式
+input_option = st.radio("Choose input method:", ("SMILES Input", "SDF File Upload"))
+mols = []  # List to store processed molecules
 
-    # **SMILES 输入**
-    if input_option == "SMILES Input":
-        smiles = st.text_input("Enter the SMILES representation of the molecule:", placeholder="e.g., CCO")
-        if smiles:
-            try:
-                st.info("Processing SMILES input...")
-                mol = Chem.MolFromSmiles(smiles)
-                if mol:
-                    # Convert to 3D molecule
-                    mol = AllChem.AddHs(mol)
-                    result = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  # Use ETKDG algorithm
-                    if result == -1:
-                        st.error("Failed to generate 3D conformation. Please check the molecular structure.")
-                    else:
-                        AllChem.MMFFOptimizeMolecule(mol)
-                        if mol not in mols:  # Check if molecule is already added
-                            mols.append(mol)
-                            st.success("SMILES converted successfully!")
-                        else:
-                            st.warning("Molecule already exists. Skipping.")
+# **SMILES 输入**
+if input_option == "SMILES Input":
+    smiles = st.text_input("Enter the SMILES representation of the molecule:", placeholder="e.g., CCO")
+    if smiles:
+        try:
+            st.info("Processing SMILES input...")
+            mol = Chem.MolFromSmiles(smiles)
+            if mol:
+                # Convert to 3D molecule
+                mol = AllChem.AddHs(mol)
+                result = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  # Use ETKDG algorithm
+                if result == -1:
+                    st.error("Failed to generate 3D conformation. Please check the molecular structure.")
                 else:
-                    st.error("Invalid SMILES input. Please check the format.")
-            except Exception as e:
-                st.error(f"An error occurred while processing SMILES: {e}")
+                    AllChem.MMFFOptimizeMolecule(mol)
+                    if mol not in mols:  # Check if molecule is already added
+                        mols.append(mol)
+                        st.success("SMILES converted successfully!")
+                    else:
+                        st.warning("Molecule already exists. Skipping.")
+            else:
+                st.error("Invalid SMILES input. Please check the format.")
+        except Exception as e:
+            st.error(f"An error occurred while processing SMILES: {e}")
 
 # **SDF 文件上传**
 elif input_option == "SDF File Upload":
