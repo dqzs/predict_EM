@@ -45,12 +45,10 @@ if input_option == "SMILES Input":
         try:
             st.info("Processing SMILES input...")
             mol = Chem.MolFromSmiles(smiles)
-            if mol:
-                # Convert to 3D molecule
-                mol = AllChem.AddHs(mol)
-                result = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  # Use ETKDG algorithm
-            else:
-                st.error("Invalid SMILES input. Please check the format.")
+            # Convert to 3D molecule
+            mol = AllChem.AddHs(mol)
+            result = AllChem.EmbedMolecule(mol, AllChem.ETKDG())  # Use ETKDG algorithm
+           
         except Exception as e:
             st.error(f"An error occurred while processing SMILES: {e}")
 
