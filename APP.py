@@ -8,21 +8,29 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 页面标题
+# 页面标题及说明
 st.markdown(
     """
     <div style='text-align: center;'>
-        <h1>Prediction of fluorescence emission λem based on molecular structure</h1>
-        <blockquote style='margin: auto; width: 70%; background: #f9f9f9; border-left: 10px solid #ccc; padding: 10px; font-size: 1.1em;'>
-            The tool is designed to quickly predict the λem of a molecule based on its structure (SMILES or SDF file) using molecular descriptors and machine learning models. It is recommended to use sdf files of molecules drawn by ChemDraw software.
-        </blockquote>
+        <h1 style='width: 80%; margin: 0 auto;'>Prediction of fluorescence emission λem based on molecular structure</h1>
+    </div>
+    <div style='width: 80%; margin: 10px auto; text-align: justify; background: #f9f9f9; border: 1px solid #ddd; padding: 15px; border-radius: 5px;'>
+        <p style='font-size: 1.1em; line-height: 1.6;'>
+            The tool is designed to quickly predict the λem of a molecule based on its structure (SMILES or SDF file) using molecular descriptors and machine learning models. 
+            It is recommended to use sdf files of molecules drawn by ChemDraw software.
+        </p>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
 # 提供两种输入方式
-input_option = st.radio("Choose input method:", ("SMILES Input", "SDF File Upload"))
+input_option = st.radio("Choose input method:", ("SMILES Input", "SDF File Upload"), index=0)
+
+# 调整后布局居中
+container_style = "width: 80%; margin: 0 auto; text-align: center;"
+
+st.markdown(f"<div style='{container_style}'>", unsafe_allow_html=True)
 
 mols = []  # List to store processed molecules
 
@@ -80,7 +88,7 @@ elif input_option == "SDF File Upload":
 # Add submit button
 submit_button = st.button("Submit and Predict", key="predict_button")
 
-# If submit button is clicked and there are valid molecules
+# 如果点击提交按钮并且存在有效分子
 if submit_button and mols:
     with st.spinner("Calculating molecular descriptors and making predictions..."):
         try:
@@ -150,3 +158,5 @@ if submit_button and mols:
 
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
+
+st.markdown("</div>", unsafe_allow_html=True)
