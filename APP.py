@@ -1,7 +1,6 @@
 import streamlit as st
 from rdkit import Chem
 from rdkit.Chem import Descriptors, AllChem
-from rdkit.ML.Descriptors import MoleculeDescriptors
 from mordred import Calculator, descriptors
 import pandas as pd
 from autogluon.tabular import TabularPredictor
@@ -29,7 +28,7 @@ st.markdown(
     """
     <div class='rounded-container'>
         <div style='text-align: center;'>
-            <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
+            <h1>Predict Organic Fluorescence Emission Wavelengths</h1>
             <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
                 This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models.
                 It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. 
@@ -92,49 +91,51 @@ elif input_option == "SDF File Upload":
 # 提交按钮
 submit_button = st.button("Submit and Predict", key="predict_button")
 
+# 用户指定的描述符列表
+required_descriptors = [
+    "SdsCH", "MolLogP", "SdssC", "VSA_EState7",
+    "SlogP_VSA8", "VE1_A", "EState_VSA4", "AATS8i", "AATS4i"
+]
+
 # 如果点击提交按钮且存在有效分子
 if submit_button and mols:
     with st.spinner("Calculating molecular descriptors and making predictions..."):
         try:
-            # 显示分子量
-            st.info("Calculating molecular weights and descriptors...")
+            st.info("Calculating molecular descriptors, please wait...")
+            
+            # 初始化 Mordred 计算器，筛选描述符
+            calc = Calculator(descriptors, ignore_3D=True)
+            mordred_selected = [d for d in calc.descriptors if str(d) in required_descriptors]
+
+            # 确保仅包含指定的描述符
+            if mordred_selected:
+                calc = Calculator(mordred_selected, ignore_3D=True)
+
+            # RDKit 描述符手动筛选
+            rdkit_descriptor_map = {
+                "MolLogP": Descriptors.MolLogP
+            }
+            rdkit_selected = {k: v for k, v in rdkit_descriptor_map.items() if k in required_descriptors}
+
+            # 计算分子描述符
             molecular_descriptor = []
-            for i, mol in enumerate(mols):
+            for mol in mols:
                 if mol is None:
                     continue
 
-                # 显示分子量
-                mol_weight = Descriptors.MolWt(mol)
-                st.write(f"Molecule {i + 1} Molecular Weight: {mol_weight:.2f} g/mol")
+                # Mordred 描述符
+                mordred_desc_df = calc.pandas([mol])
 
-            # 计算分子描述符
-            st.info("Calculating molecular descriptors, please wait...")
-            calc = Calculator(descriptors, ignore_3D=True)
-            mordred_description = []
-            rdkit_description = [x[0] for x in Descriptors._descList]
+                # RDKit 描述符
+                rdkit_desc_dict = {name: func(mol) for name, func in rdkit_selected.items()}
+                rdkit_desc_df = pd.DataFrame([rdkit_desc_dict])
 
-            # 比较并过滤描述符
-            for i in calc.descriptors:
-                mordred_description.append(i.__str__())
-            for i in mordred_description:
-                if i in rdkit_description:
-                    rdkit_description.remove(i)
-
-            descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_description)
-
-            molecular_descriptor = []
-            for mol in mols:
-                calculator_descript = pd.DataFrame(calc.pandas([mol]))
-                rdkit_descriptors = pd.DataFrame(
-                    [descriptor_calculator.CalcDescriptors(mol)],
-                    columns=rdkit_description
-                )
-                combined_descript = calculator_descript.join(rdkit_descriptors)
-                molecular_descriptor.append(combined_descript)
+                # 合并结果
+                combined_descriptors = mordred_desc_df.join(rdkit_desc_df)
+                molecular_descriptor.append(combined_descriptors)
 
             # 合并所有分子描述符数据帧
             result_df = pd.concat(molecular_descriptor, ignore_index=True)
-            result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
             # 加载 AutoGluon 模型
             st.info("Loading the model and predicting the emission wavelength, please wait...")
