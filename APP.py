@@ -13,7 +13,7 @@ st.markdown(
     <div style='text-align: center;'>
         <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
         <blockquote style='margin: auto; width: 90%; background: #f9f9f9; border-left: 0px solid #ccc; padding: 10px; font-size: 1.1em;'>
-             The site aims to quickly predict the λem of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw the molecule and convert it to sdf.
+             This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw molecules and convert them to sdf.
         </blockquote>
     </div>
     """,
@@ -114,7 +114,7 @@ if submit_button and mols:
             result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
             # Load AutoGluon model
-            st.info("Loading model and making predictions, please wait...")
+            st.info("Loading the model and predicting the emission wavelength, please wait...")
             predictor = TabularPredictor.load("ag-20241119_124834")
 
             # Define all model names
