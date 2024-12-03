@@ -11,8 +11,8 @@ import tempfile
 st.markdown(
     """
     <style>
-    .rounded-container {
-        border: 3px solid #4CAF50; /* 绿色边框 */
+    .stApp {
+        border: 3px solid #000000; /* 绿色边框 */
         border-radius: 15px; /* 圆角 */
         padding: 20px; /* 内边距 */
         margin: 20px auto; /* 自动居中 */
