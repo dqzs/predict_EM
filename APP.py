@@ -6,22 +6,7 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 添加 CSS 样式，定义更紧凑的圆角框
-st.markdown(
-    """
-    <style>
-    .stApp {
-        border: 2px solid #000000; /* 黑色边框 */
-        border-radius: 20px; /* 圆角边框 */
-        padding: 15px; /* 内边距 */
-        margin: 46px auto; /* 修改顶部外边距为20px，底部为10px，左右自动 */
-        max-width: 40%; /* 最大宽度，适配窗口 */
-        background-color: #f9f9f9; /* 背景颜色 */
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+
 
 # 页面标题和简介
 st.markdown(
@@ -40,8 +25,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# 包裹所有内容的 div，使用长圆角框
-st.markdown("<div class='long-rounded-container'>", unsafe_allow_html=True)
+
 
 # 提供两种输入方式
 input_option = st.radio("Choose input method:", ("SMILES Input", "SDF File Upload"))
@@ -169,5 +153,4 @@ if submit_button and mols:
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
 
-# 关闭圆角框 div
-st.markdown("</div>", unsafe_allow_html=True)
+
