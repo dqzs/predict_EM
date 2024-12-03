@@ -15,7 +15,7 @@ st.markdown(
         border: 2px solid #000000; /* 黑色边框 */
         border-radius: 20px; /* 圆角边框 */
         padding: 200px; /* 内边距 */
-        margin: 20px; /* 外边距 */
+        margin: 200px; /* 外边距 */
     }
     </style>
     """,
