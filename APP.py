@@ -22,26 +22,36 @@ st.markdown(
     .stApp {
         background-color: #ffffff; /* 页面背景 */
     }
+    .long-rounded-container {
+        border: 2px solid #000000;
+        border-radius: 20px;
+        padding: 15px;
+        margin: 10px auto;
+        max-width: 95%; /* 调整宽度以适应更多内容 */
+        background-color: #f9f9f9;
+    }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-# 包裹所有内容的 div
-st.markdown("<div class='rounded-container'>", unsafe_allow_html=True)
-
 # 页面标题和简介
 st.markdown(
     """
-    <div style='text-align: center;'>
-        <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
-        <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
-            This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw molecules and convert them to sdf.
-        </blockquote>
+    <div class='rounded-container'>
+        <div style='text-align: center;'>
+            <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
+            <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
+                This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw molecules and convert them to sdf.
+            </blockquote>
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
 )
+
+# 包裹所有内容的 div，使用长圆角框
+st.markdown("<div class='long-rounded-container'>", unsafe_allow_html=True)
 
 # 提供两种输入方式
 input_option = st.radio("Choose input method:", ("SMILES Input", "SDF File Upload"))
