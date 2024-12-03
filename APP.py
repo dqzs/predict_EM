@@ -91,6 +91,21 @@ elif input_option == "SDF File Upload":
 # 提交按钮
 submit_button = st.button("Submit and Predict", key="predict_button")
 
+# 如果点击提交按钮且存在有效分子
+if submit_button and mols:
+    with st.spinner("Calculating molecular descriptors and making predictions..."):
+        try:
+            # 显示分子量
+            st.info("Calculating molecular weights and descriptors...")
+            molecular_descriptor = []
+            for i, mol in enumerate(mols):
+                if mol is None:
+                    continue
+
+                # 显示分子量
+                mol_weight = Descriptors.MolWt(mol)
+                st.write(f"Molecule {i + 1} Molecular Weight: {mol_weight:.2f} g/mol")
+
 # 用户指定的描述符列表
 required_descriptors = [
     "SdsCH", "MolLogP", "SdssC", "VSA_EState7",
