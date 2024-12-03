@@ -7,12 +7,15 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 设置页面背景颜色为浅蓝色
+# 设置页面边框样式
 st.markdown(
     """
     <style>
-    body {
-        background-color: #e6f7ff;
+    .stApp {
+        border: 2px solid #000000; /* 黑色边框 */
+        border-radius: 20px; /* 圆角边框 */
+        padding: 20px; /* 内边距 */
+        margin: 20px; /* 外边距 */
     }
     </style>
     """,
