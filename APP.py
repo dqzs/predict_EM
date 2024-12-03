@@ -26,9 +26,9 @@ st.markdown(
 st.markdown(
     """
     <div style='text-align: center;'>
-        <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
+        <h1>Predict Origin Fluorescence Emission Wavelengths</h1>
         <blockquote style='margin: auto; width: 90%; background: #f9f9f9; border-left: 0px solid #ccc; padding: 10px; font-size: 1.1em;'>
-             This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction. 
+            This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction.
         </blockquote>
     </div>
     """,
@@ -51,7 +51,6 @@ if input_option == "SMILES Input":
                 AllChem.AddHs(mol)
                 AllChem.EmbedMolecule(mol)  # Use ETKDG algorithm
                 mols.append(mol)
-            
             else:
                 st.error("Invalid SMILES input. Please check the format.")
         except Exception as e:
@@ -67,12 +66,11 @@ elif input_option == "SDF File Upload":
                 temp_file.write(uploaded_file.getbuffer())
                 temp_filename = temp_file.name
 
-            # Load the single molecule from the SDF file using RDKit
             supplier = Chem.SDMolSupplier(temp_filename)
             for mol in supplier:
                 if mol is not None:
                     mols.append(mol)
-                    break  # Since we assume only one molecule per file
+                    break  # Assuming only one molecule per file
 
             if len(mols) > 0:
                 st.success("File uploaded successfully, containing 1 valid molecule!")
@@ -88,24 +86,17 @@ submit_button = st.button("Submit and Predict", key="predict_button")
 if submit_button and mols:
     with st.spinner("Calculating molecular descriptors and making predictions..."):
         try:
-            # Display molecular weights
             st.info("Calculating molecular weights and descriptors...")
             molecular_descriptor = []
             for i, mol in enumerate(mols):
                 if mol is None:
                     continue
-
-                # Display molecular weight
                 mol_weight = Descriptors.MolWt(mol)
                 st.write(f"Molecule {i + 1} Molecular Weight: {mol_weight:.2f} g/mol")
 
-            # Calculate molecular descriptors
-            st.info("Calculating molecular descriptors, please wait...")
             calc = Calculator(descriptors, ignore_3D=True)
             mordred_description = []
             rdkit_description = [x[0] for x in Descriptors._descList]
-            
-            # Compare and filter descriptors
             for i in calc.descriptors:
                 mordred_description.append(i.__str__())
             for i in mordred_description:
@@ -113,44 +104,28 @@ if submit_button and mols:
                     rdkit_description.remove(i)
 
             descriptor_calculator = MoleculeDescriptors.MolecularDescriptorCalculator(rdkit_description)
-
             molecular_descriptor = []
             for mol in mols:
                 calculator_descript = pd.DataFrame(calc.pandas([mol]))
-                rdkit_descriptors = pd.DataFrame(
-                    [descriptor_calculator.CalcDescriptors(mol)],
-                    columns=rdkit_description
-                )
+                rdkit_descriptors = pd.DataFrame([descriptor_calculator.CalcDescriptors(mol)], columns=rdkit_description)
                 combined_descript = calculator_descript.join(rdkit_descriptors)
                 molecular_descriptor.append(combined_descript)
 
-            # Combine all molecule descriptor dataframes
             result_df = pd.concat(molecular_descriptor, ignore_index=True)
             result_df = result_df.drop(labels=result_df.dtypes[result_df.dtypes == "object"].index, axis=1)
 
-            # Load AutoGluon model
             st.info("Loading the model and predicting the emission wavelength, please wait...")
             predictor = TabularPredictor.load("ag-20241119_124834")
-
-            # Define all model names
-            model_options = [
-                "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "CatBoost_BAG_L1",
-                "NeuralNetTorch_BAG_L1", "LightGBMLarge_BAG_L1", "WeightedEnsemble_L2"
-            ]
-
-            # Store prediction results for each model
+            model_options = ["LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "CatBoost_BAG_L1", "NeuralNetTorch_BAG_L1", "LightGBMLarge_BAG_L1", "WeightedEnsemble_L2"]
             predictions_dict = {}
-
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
-                predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")  # Add "nm" unit
+                predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
 
-            # Display prediction results from all models
             st.write("Prediction results from all models:")
             results_df = pd.DataFrame(predictions_dict)
             results_df["Molecule Index"] = range(len(mols))
             results_df = results_df[["Molecule Index"] + model_options]
             st.dataframe(results_df)
-
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
