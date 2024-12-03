@@ -7,6 +7,26 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
+# 使用 CSS 添加圆形边框
+st.markdown(
+    """
+    <style>
+    .rounded-border {
+        border: 3px solid #4CAF50; /* 外边框颜色 */
+        border-radius: 15px; /* 圆角半径 */
+        padding: 20px; /* 内边距 */
+        margin: 20px auto; /* 外边距 */
+        background-color: #f9f9f9; /* 背景色 */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# 整个内容放在圆形框内
+st.markdown("<div class='rounded-border'>", unsafe_allow_html=True)
+
 # 页面标题
 st.markdown(
     """
@@ -36,7 +56,6 @@ if input_option == "SMILES Input":
                 AllChem.AddHs(mol)
                 AllChem.EmbedMolecule(mol)  # Use ETKDG algorithm
                 mols.append(mol)
-               
             else:
                 st.error("Invalid SMILES input. Please check the format.")
         except Exception as e:
@@ -139,3 +158,6 @@ if submit_button and mols:
 
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
+
+# 关闭圆框
+st.markdown("</div>", unsafe_allow_html=True)
