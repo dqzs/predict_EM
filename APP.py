@@ -6,7 +6,28 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-
+# 添加 CSS 样式，定义更紧凑的圆角框
+st.markdown(
+    """
+    <style>
+    .stApp {
+        border: 2px solid #000000;
+        border-radius: 20px;
+        padding: 15px;
+        margin: 20px auto; /* 这里可以调整顶部外边距 */
+        max-width: 90%; /* 使用百分比而不是固定值 */
+        background-color: #f9f9f9;
+    }
+    @media (max-width: 768px) {
+        .stApp {
+            margin-top: 10px; /* 在小屏幕上减少顶部外边距 */
+            max-width: 100%; /* 在小屏幕上使用全宽 */
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 # 页面标题和简介
 st.markdown(
