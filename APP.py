@@ -7,15 +7,20 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 添加 CSS 样式，定义圆角框
+# 添加 CSS 样式，定义更紧凑的圆角框
 st.markdown(
     """
     <style>
-    .stApp {
+    .rounded-container {
         border: 2px solid #000000; /* 黑色边框 */
         border-radius: 20px; /* 圆角边框 */
-        padding: 20px; /* 内边距 */
-        margin: 20px; /* 外边距 */
+        padding: 15px; /* 内边距 */
+        margin: 10px auto; /* 外边距，居中 */
+        max-width: 80%; /* 最大宽度，适配窗口 */
+        background-color: #f9f9f9; /* 背景颜色 */
+    }
+    .stApp {
+        background-color: #ffffff; /* 页面背景 */
     }
     </style>
     """,
@@ -30,7 +35,7 @@ st.markdown(
     """
     <div style='text-align: center;'>
         <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
-        <blockquote style='margin: auto; width: 90%; background: #f9f9f9; border-left: 0px solid #ccc; padding: 10px; font-size: 1.1em;'>
+        <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
             This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw molecules and convert them to sdf.
         </blockquote>
     </div>
@@ -106,7 +111,7 @@ if submit_button and mols:
             calc = Calculator(descriptors, ignore_3D=True)
             mordred_description = []
             rdkit_description = [x[0] for x in Descriptors._descList]
-            
+
             # 比较并过滤描述符
             for i in calc.descriptors:
                 mordred_description.append(i.__str__())
