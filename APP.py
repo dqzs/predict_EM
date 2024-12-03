@@ -91,8 +91,6 @@ elif input_option == "SDF File Upload":
 # 提交按钮
 submit_button = st.button("Submit and Predict", key="predict_button")
 
-
-
 # 用户指定的描述符列表
 required_descriptors = [
     "SdsCH", "MolLogP", "SdssC", "VSA_EState7",
@@ -115,9 +113,10 @@ if submit_button and mols:
 
             # RDKit 描述符手动筛选
             rdkit_descriptor_map = {
-                "MolLogP": Descriptors.MolLogP
+                "MolLogP": Descriptors.MolLogP,
+                "MolWt": Descriptors.MolWt,  # 分子量
             }
-            rdkit_selected = {k: v for k, v in rdkit_descriptor_map.items() if k in required_descriptors}
+            rdkit_selected = {k: v for k, v in rdkit_descriptor_map.items() if k in required_descriptors or k == "MolWt"}
 
             # 计算分子描述符
             molecular_descriptor = []
@@ -125,12 +124,16 @@ if submit_button and mols:
                 if mol is None:
                     continue
 
-                # Mordred 描述符
-                mordred_desc_df = calc.pandas([mol])
-
                 # RDKit 描述符
                 rdkit_desc_dict = {name: func(mol) for name, func in rdkit_selected.items()}
                 rdkit_desc_df = pd.DataFrame([rdkit_desc_dict])
+
+                # 显示分子量
+                mol_weight = rdkit_desc_dict.get("MolWt", "N/A")
+                st.write(f"Molecular Weight: {mol_weight:.2f} g/mol")
+
+                # Mordred 描述符
+                mordred_desc_df = calc.pandas([mol])
 
                 # 合并结果
                 combined_descriptors = mordred_desc_df.join(rdkit_desc_df)
