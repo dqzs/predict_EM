@@ -14,7 +14,7 @@ st.markdown(
         border: 2px solid #000000;
         border-radius: 20px;
         padding: 15px;
-        margin: 40px auto; /* 这里可以调整顶部外边距 */
+        margin: 50px auto; /* 这里可以调整顶部外边距 */
         max-width: 40%; /* 使用百分比而不是固定值 */
         background-color: #f9f9f9;
     }
