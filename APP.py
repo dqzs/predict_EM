@@ -26,7 +26,7 @@ mols = []  # List to store processed molecules
 
 # **SMILES 输入**
 if input_option == "SMILES Input":
-    smiles = st.text_input("Enter the SMILES representation of the molecule:", placeholder="e.g., CCO")
+    smiles = st.text_input("Enter the SMILES representation of the molecule:", placeholder="e.g., NC1=CC=C(C=C1)C(=O)O")
     if smiles:
         try:
             st.info("Processing SMILES input...")
