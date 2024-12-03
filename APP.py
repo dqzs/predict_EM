@@ -12,13 +12,10 @@ st.markdown(
     """
     <style>
     .stApp {
-        border: 3px solid #000000; /* 绿色边框 */
-        border-radius: 15px; /* 圆角 */
+        border: 2px solid #000000; /* 黑色边框 */
+        border-radius: 20px; /* 圆角边框 */
         padding: 20px; /* 内边距 */
-        margin: 20px auto; /* 自动居中 */
-        background-color: #f9f9f9; /* 背景颜色 */
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-        width: 90%; /* 宽度 */
+        margin: 20px; /* 外边距 */
     }
     </style>
     """,
