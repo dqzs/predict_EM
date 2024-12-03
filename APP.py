@@ -15,7 +15,7 @@ st.markdown(
         border: 2px solid #000000; /* 黑色边框 */
         border-radius: 20px; /* 圆角边框 */
         padding: 15px; /* 内边距 */
-        margin: 10px auto; /* 外边距，居中 */
+        margin: 20px auto 10px; /* 修改顶部外边距为20px，底部为10px，左右自动 */
         max-width: 40%; /* 最大宽度，适配窗口 */
         background-color: #f9f9f9; /* 背景颜色 */
     }
