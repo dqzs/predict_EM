@@ -7,13 +7,25 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
+# 设置页面背景颜色为浅蓝色
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: #e6f7ff;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # 页面标题
 st.markdown(
     """
     <div style='text-align: center;'>
         <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
         <blockquote style='margin: auto; width: 90%; background: #f9f9f9; border-left: 0px solid #ccc; padding: 10px; font-size: 1.1em;'>
-             This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction.
+             This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction. 
         </blockquote>
     </div>
     """,
@@ -36,7 +48,7 @@ if input_option == "SMILES Input":
                 AllChem.AddHs(mol)
                 AllChem.EmbedMolecule(mol)  # Use ETKDG algorithm
                 mols.append(mol)
-               
+            
             else:
                 st.error("Invalid SMILES input. Please check the format.")
         except Exception as e:
