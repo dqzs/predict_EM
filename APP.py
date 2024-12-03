@@ -14,14 +14,14 @@ st.markdown(
         border: 2px solid #000000;
         border-radius: 20px;
         padding: 15px;
-        margin: 20px auto; /* 这里可以调整顶部外边距 */
-        max-width: 45%; /* 使用百分比而不是固定值 */
+        margin: 40px auto; /* 这里可以调整顶部外边距 */
+        max-width: 40%; /* 使用百分比而不是固定值 */
         background-color: #f9f9f9;
     }
     @media (max-width: 768px) {
         .stApp {
             margin-top: 10px; /* 在小屏幕上减少顶部外边距 */
-            max-width: 90%; /* 在小屏幕上使用全宽 */
+            max-width: 95%; /* 在小屏幕上使用全宽 */
         }
     }
     </style>
