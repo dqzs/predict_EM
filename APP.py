@@ -11,14 +11,6 @@ import tempfile
 st.markdown(
     """
     <style>
-    .rounded-container {
-        border: 2px solid #000000; /* 黑色边框 */
-        border-radius: 20px; /* 圆角边框 */
-        padding: 15px; /* 内边距 */
-        margin: 10px auto; /* 外边距，居中 */
-        max-width: 80%; /* 最大宽度，适配窗口 */
-        background-color: #f9f9f9; /* 背景颜色 */
-    }
     .stApp {
         background-color: #ffffff; /* 页面背景 */
     }
