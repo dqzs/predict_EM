@@ -31,7 +31,7 @@ st.markdown(
         <div style='text-align: center;'>
             <h1>Predict Originc Fluorescence Emission Wavelengths</h1>
             <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
-                This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw molecules and convert them to sdf.
+                This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models. It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction.
             </blockquote>
         </div>
     </div>
