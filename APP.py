@@ -19,17 +19,6 @@ st.markdown(
         max-width: 80%; /* 最大宽度，适配窗口 */
         background-color: #f9f9f9; /* 背景颜色 */
     }
-    .stApp {
-        background-color: #ffffff; /* 页面背景 */
-    }
-    .long-rounded-container {
-        border: 2px solid #000000;
-        border-radius: 20px;
-        padding: 15px;
-        margin: 10px auto;
-        max-width: 95%; /* 调整宽度以适应更多内容 */
-        background-color: #f9f9f9;
-    }
     </style>
     """,
     unsafe_allow_html=True,
