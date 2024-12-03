@@ -23,7 +23,7 @@ st.markdown(
             border: 2px solid #000000;
             border-radius: 20px;
             padding: 15px;
-            margin: 50px auto; /* 这里可以调整顶部外边距 */
+            margin: 100px auto; /* 这里可以调整顶部外边距 */
             margin-top: 10px; /* 在小屏幕上减少顶部外边距 */
             max-width: 95%; /* 在小屏幕上使用全宽 */
         }
