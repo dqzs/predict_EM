@@ -24,13 +24,7 @@ st.markdown(
             max-width: 95%; /* 在小屏幕上使用全宽 */
         }
     }
-    .rounded-container h3 {
-    text-align: center; /* 确保标题文本居中 */
-    background-color: #e0e0e0; /* 标题背景颜色 */
-    padding: 10px; /* 标题内边距 */
-    border-radius: 10px; /* 标题圆角 */
-    margin: 0px; /* 移除外边距，使标题紧贴容器顶部 */
-}
+   
     .rounded-container blockquote {
         text-align: left; /* 保持块引用文本左对齐 */
         background-color: #f0f0f0; /* 块引用背景颜色 */
