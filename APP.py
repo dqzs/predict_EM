@@ -32,6 +32,7 @@ st.markdown(
     }
     .rounded-container blockquote {
         text-align: left; /* 保持块引用文本左对齐 */
+        margin: 20px auto; /* 调整顶部外边距 */
         background-color: #f0f0f0; /* 块引用背景颜色 */
         padding: 10px; /* 块引用内边距 */
         font-size: 1.1em; /* 字体大小 */
