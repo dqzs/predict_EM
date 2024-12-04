@@ -6,7 +6,7 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 添加 CSS 样式，定义更紧凑的圆角框
+# 添加 CSS 样式，定义更紧凑的圆角框和背景
 st.markdown(
     """
     <style>
@@ -14,7 +14,7 @@ st.markdown(
         border: 2px solid #808080;
         border-radius: 20px;
         padding: 15px;
-        margin: 50px auto; /* 这里可以调整顶部外边距 */
+        margin: 50px auto; /* 调整顶部外边距 */
         max-width: 39%; /* 使用百分比而不是固定值 */
         background-color: #f9f9f9;
     }
@@ -24,47 +24,42 @@ st.markdown(
             max-width: 95%; /* 在小屏幕上使用全宽 */
         }
     }
+    .rounded-container h3 {
+        text-align: center; /* 确保标题文本居中 */
+        background-color: #e0e0e0; /* 标题背景颜色 */
+        padding: 10px; /* 标题内边距 */
+        border-radius: 10px; /* 标题圆角 */
+    }
+    .rounded-container blockquote {
+        text-align: left; /* 保持块引用文本左对齐 */
+        background-color: #f0f0f0; /* 块引用背景颜色 */
+        padding: 10px; /* 块引用内边距 */
+        font-size: 1.1em; /* 字体大小 */
+        max-width: 95%; /* 最大宽度 */
+    }
+    a {
+        color: #0000EE; /* 链接颜色 */
+        text-decoration: underline; /* 链接下划线 */
+    }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
-import streamlit as st
-
 # 页面标题和简介
 st.markdown(
     """
-    <style>
-        .rounded-container {
-            text-align: center; /* 确保容器内的文本居中 */
-        }
-        .rounded-container h1 {
-            margin: 20px 0; /* 为标题添加上下外边距 */
-        }
-        .rounded-container blockquote {
-            text-align: left; /* 保持块引用文本左对齐 */
-            background: #f9f9f9; /* 背景颜色 */
-            padding: 10px; /* 内边距 */
-            font-size: 1.1em; /* 字体大小 */
-            max-width: 95%; /* 最大宽度 */
-        }
-        a {
-            color: #0000EE; /* 链接颜色 */
-            text-decoration: underline; /* 链接下划线 */
-        }
-    </style>
     <div class='rounded-container'>
         <h3>Predict Organic Fluorescence Emission Wavelengths</h3>
         <blockquote>
             1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
             2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
-            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction&#39;  target='_blank'><url id="" type="url" status="" title="" wc="">https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction</a>.</url> 
+            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction' target='_blank'>GitHub</a>.
         </blockquote>
     </div>
     """,
     unsafe_allow_html=True,
 )
-
 
 
 
