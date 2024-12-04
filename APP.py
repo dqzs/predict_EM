@@ -11,7 +11,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        border: 2px solid #000000; /* 黑色边框 */
+        border: 2px solid #808080
         border-radius: 20px; /* 圆角边框 */
         padding: 15px; /* 内边距 */
         margin: 46px auto; /* 修改顶部外边距为46px */
