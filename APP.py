@@ -19,7 +19,7 @@ st.markdown(
         background-color: #f9f9f9; /* 背景颜色 */
     }
     h1 {
-        text-align: left; /* 顶格显示标题 */
+        text-align: conter; /* 顶格显示标题 */
         margin: 0px 0px 10px 0px; /* 去除顶部和底部外边距 */
     }
     </style>
