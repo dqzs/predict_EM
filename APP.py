@@ -6,7 +6,7 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 添加 CSS 样式，定义更紧凑的圆角框
+# 添加 CSS 样式，定义更紧凑的圆角框和顶格标题样式
 st.markdown(
     """
     <style>
@@ -14,9 +14,13 @@ st.markdown(
         border: 2px solid #000000; /* 黑色边框 */
         border-radius: 20px; /* 圆角边框 */
         padding: 15px; /* 内边距 */
-        margin: 46px auto; /* 修改顶部外边距为20px，底部为10px，左右自动 */
-        max-width: 39%; /* 最大宽度，适配窗口 */
+        margin: 46px auto; /* 修改顶部外边距为46px */
+        max-width: 40%; /* 最大宽度，适配窗口 */
         background-color: #f9f9f9; /* 背景颜色 */
+    }
+    h1 {
+        text-align: left; /* 顶格显示标题 */
+        margin: 0px 0px 10px 0px; /* 去除顶部和底部外边距 */
     }
     </style>
     """,
@@ -26,19 +30,16 @@ st.markdown(
 # 页面标题和简介
 st.markdown(
     """
-    <div class='rounded-container'>
-        <div style='text-align: center;'>
-            <h1>Predict Organic Fluorescence Emission Wavelengths</h1>
-            <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
-                This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models.
-                It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. 
-                The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction.
-            </blockquote>
-        </div>
-    </div>
+    <h1>Predict Organic Fluorescence Emission Wavelengths</h1>
+    <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
+        This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models.
+        It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. 
+        The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction.
+    </blockquote>
     """,
     unsafe_allow_html=True,
 )
+
 
 # 包裹所有内容的 div，使用长圆角框
 st.markdown("<div class='long-rounded-container'>", unsafe_allow_html=True)
