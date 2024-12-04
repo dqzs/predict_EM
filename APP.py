@@ -24,7 +24,7 @@ st.markdown(
         }
     }
     .rounded-container h2 {
-        margin-top: -60px; /* 调整顶部外边距 */
+        margin-top: -80px; /* 调整顶部外边距 */
         text-align: center; /* 确保标题文本居中 */
         background-color: #e0e0e0; /* 标题背景颜色 */
         padding: 10px; /* 标题内边距 */
