@@ -194,4 +194,3 @@ if submit_button and mols:
 
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
-帮我修改代码，要求标题加背景，
