@@ -11,7 +11,12 @@ st.markdown(
     """
     <style>
     .stApp {
-        padding: 0px; /* 去除整体页面的多余间距 */
+        border: 2px solid #000000; /* 黑色边框 */
+        border-radius: 20px; /* 圆角边框 */
+        padding: 15px; /* 内边距 */
+        margin: 46px auto; /* 修改顶部外边距为46px */
+        max-width: 39%; /* 最大宽度，适配窗口 */
+        background-color: #f9f9f9; /* 背景颜色 */
     }
     h1 {
         text-align: center; /* 居中显示标题 */
