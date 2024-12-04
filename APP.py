@@ -38,7 +38,7 @@ st.markdown(
             <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
                 This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
                 It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
-                code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction' target='_blank'>https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction</a>.
+                Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction' target='_blank'>https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction</a>.
             </blockquote>
         </div>
     </div>
