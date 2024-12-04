@@ -29,6 +29,8 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+import streamlit as st
+
 # 页面标题和简介
 st.markdown(
     """
@@ -36,21 +38,34 @@ st.markdown(
         .rounded-container {
             text-align: center; /* 确保容器内的文本居中 */
         }
+        .rounded-container h1 {
+            margin: 20px 0; /* 为标题添加上下外边距 */
+        }
         .rounded-container blockquote {
             text-align: left; /* 保持块引用文本左对齐 */
+            background: #f9f9f9; /* 背景颜色 */
+            padding: 10px; /* 内边距 */
+            font-size: 1.1em; /* 字体大小 */
+            max-width: 95%; /* 最大宽度 */
+        }
+        a {
+            color: #0000EE; /* 链接颜色 */
+            text-decoration: underline; /* 链接下划线 */
         }
     </style>
     <div class='rounded-container'>
         <h1>Predict Organic Fluorescence Emission Wavelengths</h1>
-        <blockquote style='background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 95%;'>
+        <blockquote>
             1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
             2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
-            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction' target='_blank'>GitHub</a>.
+            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction' target='_blank'>https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction</a>.
         </blockquote>
     </div>
     """,
     unsafe_allow_html=True,
 )
+
+
 
 
 
