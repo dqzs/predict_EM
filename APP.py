@@ -6,21 +6,25 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 添加 CSS 样式，定义更紧凑的圆角框和顶格标题样式
+# 添加 CSS 样式，确保标题居中且顶格显示
 st.markdown(
     """
     <style>
     .stApp {
-        border: 2px solid #000000; /* 黑色边框 */
-        border-radius: 20px; /* 圆角边框 */
-        padding: 15px; /* 内边距 */
-        margin: 46px auto; /* 修改顶部外边距为46px */
-        max-width: 40%; /* 最大宽度，适配窗口 */
-        background-color: #f9f9f9; /* 背景颜色 */
+        padding: 0px; /* 去除整体页面的多余间距 */
     }
     h1 {
-        text-align: conter; /* 顶格显示标题 */
-        margin: 0px 0px 10px 0px; /* 去除顶部和底部外边距 */
+        text-align: center; /* 居中显示标题 */
+        margin: 0; /* 去除外边距 */
+        font-size: 2.5em; /* 标题字体大小 */
+    }
+    blockquote {
+        margin: 10px auto; /* 调整块引用的外边距 */
+        background: #f9f9f9; /* 设置块背景颜色 */
+        border-left: 4px solid #ccc; /* 添加左边框 */
+        padding: 10px; /* 设置块的内边距 */
+        font-size: 1.1em; /* 调整字体大小 */
+        max-width: 90%; /* 限制块宽度 */
     }
     </style>
     """,
@@ -31,7 +35,7 @@ st.markdown(
 st.markdown(
     """
     <h1>Predict Organic Fluorescence Emission Wavelengths</h1>
-    <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
+    <blockquote>
         This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models.
         It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. 
         The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction.
@@ -39,6 +43,7 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
 
 
 # 包裹所有内容的 div，使用长圆角框
