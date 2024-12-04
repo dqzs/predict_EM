@@ -35,7 +35,7 @@ st.markdown(
         background-color: #f0f0f0; /* 块引用背景颜色 */
         padding: 10px; /* 块引用内边距 */
         font-size: 1.1em; /* 字体大小 */
-        max-width: 95%; /* 最大宽度 */
+         /*max-width: 95%; 最大宽度 */
     }
     a {
         color: #0000EE; /* 链接颜色 */
