@@ -6,53 +6,68 @@ import pandas as pd
 from autogluon.tabular import TabularPredictor
 import tempfile
 
-# 添加 CSS 样式，确保标题居中且顶格显示
+# 添加 CSS 样式，定义更紧凑的圆角框
 st.markdown(
     """
     <style>
     .stApp {
-        border: 2px solid #808080
-        border-radius: 20px; /* 圆角边框 */
-        padding: 15px; /* 内边距 */
-        margin: 46px auto; /* 修改顶部外边距为46px */
-        max-width: 39%; /* 最大宽度，适配窗口 */
-        background-color: #f9f9f9; /* 背景颜色 */
+        border: 2px solid #808080;
+        border-radius: 20px;
+        padding: 15px;
+        margin: 50px auto; /* 这里可以调整顶部外边距 */
+        max-width: 39%; /* 使用百分比而不是固定值 */
+        background-color: #f9f9f9;
     }
-    h1 {
-        text-align: center; /* 居中显示标题 */
-        margin: 0; /* 去除外边距 */
-        font-size: 2.5em; /* 标题字体大小 */
-    }
-    blockquote {
-        margin: 10px auto; /* 调整块引用的外边距 */
-        background: #f9f9f9; /* 设置块背景颜色 */
-        border-left: 4px solid #ccc; /* 添加左边框 */
-        padding: 10px; /* 设置块的内边距 */
-        font-size: 1.1em; /* 调整字体大小 */
-        max-width: 90%; /* 限制块宽度 */
+    @media (max-width: 768px) {
+        .stApp {
+            margin-top: 45px; /* 在小屏幕上减少顶部外边距 */
+            max-width: 95%; /* 在小屏幕上使用全宽 */
+        }
     }
     </style>
     """,
     unsafe_allow_html=True,
 )
 
+import streamlit as st
+
 # 页面标题和简介
 st.markdown(
     """
-    <h1>Predict Organic Fluorescence Emission Wavelengths</h1>
-    <blockquote>
-        This website aims to quickly predict the emission wavelength of a molecule based on its structure (SMILES or SDF file) using machine learning models.
-        It is recommended to use ChemDraw software to draw the molecules and convert them to sdf. 
-        The training code and data have been uploaded to https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction.
-    </blockquote>
+    <style>
+        .rounded-container {
+            text-align: center; /* 确保容器内的文本居中 */
+        }
+        .rounded-container h1 {
+            margin: 20px 0; /* 为标题添加上下外边距 */
+        }
+        .rounded-container blockquote {
+            text-align: left; /* 保持块引用文本左对齐 */
+            background: #f9f9f9; /* 背景颜色 */
+            padding: 10px; /* 内边距 */
+            font-size: 1.1em; /* 字体大小 */
+            max-width: 95%; /* 最大宽度 */
+        }
+        a {
+            color: #0000EE; /* 链接颜色 */
+            text-decoration: underline; /* 链接下划线 */
+        }
+    </style>
+    <div class='rounded-container'>
+        <h3>Predict Organic Fluorescence Emission Wavelengths</h3>
+        <blockquote>
+            1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
+            2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
+            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction&#39;  target='_blank'><url id="" type="url" status="" title="" wc="">https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction</a>.</url> 
+        </blockquote>
+    </div>
     """,
     unsafe_allow_html=True,
 )
 
 
 
-# 包裹所有内容的 div，使用长圆角框
-st.markdown("<div class='long-rounded-container'>", unsafe_allow_html=True)
+
 
 # 提供两种输入方式
 input_option = st.radio("Choose input method:", ("SMILES Input", "SDF File Upload"))
@@ -179,6 +194,4 @@ if submit_button and mols:
 
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
-
-# 关闭圆角框 div
-st.markdown("</div>", unsafe_allow_html=True)
+帮我修改代码，要求标题加背景，
