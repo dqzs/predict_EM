@@ -27,7 +27,7 @@ st.markdown(
     .rounded-container h3 {
         text-align: center; /* 确保标题文本居中 */
         background-color: #e0e0e0; /* 标题背景颜色 */
-        padding: 10px; /* 标题内边距 */
+        padding: 1px; /* 标题内边距 */
         border-radius: 10px; /* 标题圆角 */
     }
     .rounded-container blockquote {
