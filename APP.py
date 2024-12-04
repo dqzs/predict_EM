@@ -33,7 +33,7 @@ st.markdown(
 st.markdown(
     """
     <div class='rounded-container'>
-        <div style='text-align: center;'>
+        <div style='text-align: left;'>
             <h1>Predict Organic Fluorescence Emission Wavelengths</h1>
             <blockquote style='margin: auto; background: #f9f9f9; border-left: 4px solid #ccc; padding: 10px; font-size: 1.1em; max-width: 90%;'>
                 This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
