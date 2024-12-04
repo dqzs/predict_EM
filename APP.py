@@ -29,7 +29,7 @@ st.markdown(
     background-color: #e0e0e0; /* 标题背景颜色 */
     padding: 10px; /* 标题内边距 */
     border-radius: 10px; /* 标题圆角 */
-    margin-top: 0; /* 移除外边距，使标题紧贴容器顶部 */
+    margin: 0px; /* 移除外边距，使标题紧贴容器顶部 */
 }
     .rounded-container blockquote {
         text-align: left; /* 保持块引用文本左对齐 */
