@@ -23,8 +23,8 @@ st.markdown(
             max-width: 95%; /* 在小屏幕上使用全宽 */
         }
     }
-    .rounded-container h1 {
-        margin: -50px auto; /* 调整顶部外边距 */
+    .rounded-container h2 {
+        margin: -30px auto; /* 调整顶部外边距 */
         text-align: center; /* 确保标题文本居中 */
         background-color: #e0e0e0; /* 标题背景颜色 */
         padding: 10px; /* 标题内边距 */
@@ -36,6 +36,7 @@ st.markdown(
         background-color: #f0f0f0; /* 块引用背景颜色 */
         padding: 10px; /* 块引用内边距 */
         font-size: 1.1em; /* 字体大小 */
+        border-radius: 10px; /* 标题圆角 */
     }
     a {
         color: #0000EE; /* 链接颜色 */
@@ -50,7 +51,7 @@ st.markdown(
 st.markdown(
     """
     <div class='rounded-container'>
-        <h1>Predict Organic Fluorescence Emission Wavelengths</h1>
+        <h2>Predict Organic Fluorescence Emission Wavelengths</h2>
         <blockquote>
             1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
             2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
