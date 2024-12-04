@@ -36,6 +36,7 @@ st.markdown(
         padding: 10px; /* 块引用内边距 */
         font-size: 1.1em; /* 字体大小 */
          /*max-width: 95%; 最大宽度 */
+        border-radius: 10px; /* 标题圆角 */
     }
     a {
         color: #0000EE; /* 链接颜色 */
