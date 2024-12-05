@@ -43,7 +43,7 @@ st.markdown(
         color: #333;
     }
     .stDataFrame {
-        margin-bottom: 2px !important; /* 调整 DataFrame 和大容器的底部间距 */
+        margin-bottom: -200px !important; /* 调整 DataFrame 和大容器的底部间距 */
     }
     </style>
     """,
