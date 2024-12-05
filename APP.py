@@ -11,11 +11,15 @@ st.markdown(
     """
     <style>
     .stApp {
-        border: 2px solid #808080;
-        border-radius: 20px;
-        margin: 50px auto ;
-        max-width: 39%;
-        background-color: #f9f9f9f9;
+    border: 2px solid #808080;
+    border-radius: 20px;
+    margin: 50px auto;
+    max-width: 39%;
+    background-color: #f9f9f9f9;
+    padding-bottom: 0px; /* 减少底部的间距 */
+    }
+    .dataframe-container {
+        margin-bottom: 0px; /* 减少表格和底部内容的间距 */
     }
     .rounded-container h2 {
         margin-top: -80px;
@@ -157,6 +161,8 @@ if submit_button and mols:
             st.write("Prediction results from various models:")
             st.markdown("**Note:** `WeightedEnsemble_L2` is a meta-model combining predictions from other models.")
             results_df = pd.DataFrame(predictions_dict)
+            st.markdown("<div class='dataframe-container'>", unsafe_allow_html=True)
             st.dataframe(results_df)
+            st.markdown("</div>", unsafe_allow_html=True)
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
