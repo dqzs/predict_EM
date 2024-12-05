@@ -36,6 +36,11 @@ st.markdown(
         color: #0000EE;
         text-decoration: underline;
     }
+    .process-text, .molecular-weight {
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        color: #333;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -50,7 +55,7 @@ st.markdown(
         <blockquote>
             1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
             2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
-            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction' target='_blank'>GitHub</a>. 
+            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction'  target='_blank'>GitHub</a>. 
         </blockquote>
     </div>
     """,
@@ -72,19 +77,17 @@ elif input_option == "SDF File Upload":
 # 提交按钮
 submit_button = st.button("Submit and Predict", key="predict_button")
 
-
 # 用户指定的描述符列表
-
 required_descriptors = [
-"SdsCH", "MolLogP", "SdssC", "VSA_EState7",
-"SlogP_VSA8", "VE1_A", "EState_VSA4", "AATS8i", "AATS4i"
+    "SdsCH", "MolLogP", "SdssC", "VSA_EState7",
+    "SlogP_VSA8", "VE1_A", "EState_VSA4", "AATS8i", "AATS4i"
 ]
 
 # 如果点击提交按钮
 if submit_button:
     if input_option == "SMILES Input" and smiles:
         try:
-            st.text("Processing SMILES input...")  # 显示处理信息
+            st.markdown("Processing SMILES input...", unsafe_allow_html=True, css_classes=['process-text'])
             mol = Chem.MolFromSmiles(smiles)
             if mol:
                 AllChem.AddHs(mol)
@@ -97,7 +100,7 @@ if submit_button:
 
     elif input_option == "SDF File Upload" and uploaded_file:
         try:
-            st.text("Processing SDF file...")  # 显示处理信息
+            st.markdown("Processing SDF file...", unsafe_allow_html=True, css_classes=['process-text'])
             with tempfile.NamedTemporaryFile(delete=False, suffix=".sdf") as temp_file:
                 temp_file.write(uploaded_file.getbuffer())
                 temp_filename = temp_file.name
@@ -136,7 +139,7 @@ if submit_button and mols:
                 rdkit_desc_dict = {name: func(mol) for name, func in rdkit_selected.items()}
                 rdkit_desc_df = pd.DataFrame([rdkit_desc_dict])
                 mol_weight = rdkit_desc_dict.get("MolWt", "N/A")
-                st.write(f"Molecular Weight: {mol_weight:.2f} g/mol")
+                st.markdown(f"Molecular Weight: {mol_weight:.2f} g/mol", unsafe_allow_html=True, css_classes=['molecular-weight'])
                 mordred_desc_df = calc.pandas([mol])
                 combined_descriptors = mordred_desc_df.join(rdkit_desc_df)
                 molecular_descriptor.append(combined_descriptors)
