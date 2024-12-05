@@ -15,6 +15,8 @@ st.markdown(
         border-radius: 20px;
         margin: 50px auto ;
         max-width: 39%;
+        max-height: 100%;
+        overflow: hidden;
         background-color: #f9f9f9f9;
         padding-bottom: 2px; /* 将底部内边距设置为 2px */
     }
