@@ -19,7 +19,7 @@ st.markdown(
         padding-bottom: 0px; /* 减少整体框架底部间距 */
     }
     .rounded-container h2 {
-        margin-top: -80px;
+        margin-top: -90px;
         text-align: center;
         background-color: #e0e0e0e0;
         padding: 10px;
