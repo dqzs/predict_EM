@@ -14,7 +14,7 @@ st.markdown(
         border: 2px solid #808080;
         border-radius: 20px;
         margin: 50px auto;
-        max-width: 800px; /* 设置最大宽度 */
+        max-width: 39%; /* 设置最大宽度 */
         background-color: #f9f9f9f9;
         padding: 20px; /* 增加内边距 */
         box-sizing: border-box;
