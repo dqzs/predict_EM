@@ -13,34 +13,28 @@ st.markdown(
     .stApp {
         border: 2px solid #808080;
         border-radius: 20px;
-        margin: 50px auto; /* 调整顶部外边距 */
-        max-width: 39%; /* 使用百分比而不是固定值 */
-        background-color: #f9f9f9;
-    }
-    @media (max-width: 768px) {
-        .stApp {
-            margin-top: 45px; /* 在小屏幕上减少顶部外边距 */
-            max-width: 95%; /* 在小屏幕上使用全宽 */
-        }
+        margin: 50px auto;
+        max-width: 39%;
+        background-color: #f9f9f9f9;
     }
     .rounded-container h2 {
-        margin-top: -80px; /* 调整顶部外边距 */
-        text-align: center; /* 确保标题文本居中 */
-        background-color: #e0e0e0; /* 标题背景颜色 */
-        padding: 10px; /* 标题内边距 */
-        border-radius: 10px; /* 标题圆角 */
+        margin-top: -80px;
+        text-align: center;
+        background-color: #e0e0e0e0;
+        padding: 10px;
+        border-radius: 10px;
     }
     .rounded-container blockquote {
-        text-align: left; /* 保持块引用文本左对齐 */
-        margin: 20px auto; /* 调整顶部外边距 */
-        background-color: #f0f0f0; /* 块引用背景颜色 */
-        padding: 10px; /* 块引用内边距 */
-        font-size: 1.1em; /* 字体大小 */
-        border-radius: 10px; /* 标题圆角 */
+        text-align: left;
+        margin: 20px auto;
+        background-color: #f0f0f0;
+        padding: 10px;
+        font-size: 1.1em;
+        border-radius: 10px;
     }
     a {
-        color: #0000EE; /* 链接颜色 */
-        text-decoration: underline; /* 链接下划线 */
+        color: #0000EE;
+        text-decoration: underline;
     }
     </style>
     """,
@@ -51,7 +45,7 @@ st.markdown(
 st.markdown(
     """
     <div class='rounded-container'>
-        <h2>Predict Organic Fluorescence <br>Emission Wavelengths</h2>
+        <h2>Predict Organic Fluorescence Emission Wavelengths</h2>
         <blockquote>
             1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
             2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
@@ -76,15 +70,9 @@ elif input_option == "SDF File Upload":
 
 # 提交按钮
 submit_button = st.button("Submit and Predict", key="predict_button")
-# 用户指定的描述符列表
-required_descriptors = [
-    "SdsCH", "MolLogP", "SdssC", "VSA_EState7",
-    "SlogP_VSA8", "VE1_A", "EState_VSA4", "AATS8i", "AATS4i"
-]
 
 # 如果点击提交按钮
 if submit_button:
-    # 根据用户选择的输入方式处理数据
     if input_option == "SMILES Input" and smiles:
         try:
             st.text("Processing SMILES input...")  # 显示处理信息
@@ -147,17 +135,15 @@ if submit_button and mols:
             st.info("Loading the model and predicting the emission wavelength, please wait...")
             predictor = TabularPredictor.load("ag-20241119_124834")
             model_options = [
-                "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "CatBoost_BAG_L1",
-                "NeuralNetTorch_BAG_L1", "LightGBMLarge_BAG_L1", "WeightedEnsemble_L2"
+                "WeightedEnsemble_L2", "CatBoost_BAG_L1", "LightGBMLarge_BAG_L1", "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "NeuralNetTorch_BAG_L1"
             ]
             predictions_dict = {}
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
-            st.write("Prediction results from various models:")
+            st.write("Prediction results from all models:")
             results_df = pd.DataFrame(predictions_dict)
-            results_df["Molecule Index"] = range(len(mols))
-            results_df = results_df[["Molecule Index"] + model_options]
             st.dataframe(results_df)
+            st.markdown("*Note: The 'WeightedEnsemble_L2' column represents the ensemble prediction of the other models using AutoGluon.*", unsafe_allow_html=True)
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
