@@ -76,6 +76,11 @@ elif input_option == "SDF File Upload":
 
 # 提交按钮
 submit_button = st.button("Submit and Predict", key="predict_button")
+# 用户指定的描述符列表
+required_descriptors = [
+    "SdsCH", "MolLogP", "SdssC", "VSA_EState7",
+    "SlogP_VSA8", "VE1_A", "EState_VSA4", "AATS8i", "AATS4i"
+]
 
 # 如果点击提交按钮
 if submit_button:
