@@ -11,15 +11,12 @@ st.markdown(
     """
     <style>
     .stApp {
-    border: 2px solid #808080;
-    border-radius: 20px;
-    margin: 50px auto;
-    max-width: 39%;
-    background-color: #f9f9f9f9;
-    padding-bottom: 0px; /* 减少底部的间距 */
-    }
-    .dataframe-container {
-        margin-bottom: -200px; /* 减少表格和底部内容的间距 */
+        border: 2px solid #808080;
+        border-radius: 20px;
+        margin: 50px auto;
+        max-width: 39%;
+        background-color: #f9f9f9f9;
+        padding-bottom: 0px; /* 减少整体框架底部间距 */
     }
     .rounded-container h2 {
         margin-top: -80px;
@@ -45,6 +42,13 @@ st.markdown(
         font-size: 16px;
         color: #333;
     }
+    .dataframe-container {
+        margin-bottom: 0px; /* 减少数据表和下方内容的间距 */
+    }
+    .css-15tx938.e16nr0p30 { /* 修正 Streamlit 自动生成的Dataframe间距 */
+        padding: 0px;
+        margin: 0px;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -59,7 +63,7 @@ st.markdown(
         <blockquote>
             1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
             2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
-            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction&#39;   target='_blank'>GitHub</a>. 
+            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction' target='_blank'>GitHub</a>. 
         </blockquote>
     </div>
     """,
@@ -157,12 +161,11 @@ if submit_button and mols:
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
-            # 在结果中标注 WeightedEnsemble_L2 是融合模型
+            st.markdown('<div class="dataframe-container">', unsafe_allow_html=True)
             st.write("Prediction results from various models:")
             st.markdown("**Note:** `WeightedEnsemble_L2` is a meta-model combining predictions from other models.")
             results_df = pd.DataFrame(predictions_dict)
-            st.markdown("<div class='dataframe-container'>", unsafe_allow_html=True)
             st.dataframe(results_df)
-            st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
