@@ -153,9 +153,10 @@ if submit_button and mols:
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
-            st.write("Prediction results from all models:")
+            # 在结果中标注 WeightedEnsemble_L2 是融合模型
+            st.write("Prediction results from various models:")
+            st.markdown("**Note:** `WeightedEnsemble_L2` is a meta-model combining predictions from other models.")
             results_df = pd.DataFrame(predictions_dict)
             st.dataframe(results_df)
-            st.markdown("*Note: The 'WeightedEnsemble_L2' column represents the ensemble prediction of the other models using AutoGluon.*", unsafe_allow_html=True)
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
