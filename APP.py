@@ -16,7 +16,7 @@ st.markdown(
         margin: 50px auto ;
         max-width: 39%;
         background-color: #f9f9f9f9;
-        padding-bottom: -200px; /* 将底部内边距设置为 2px */
+        padding-bottom: 0px; /* 将底部内边距设置为 2px */
     }
     .rounded-container h2 {
         margin-top: -80px;
