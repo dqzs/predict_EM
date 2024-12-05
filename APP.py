@@ -87,7 +87,7 @@ required_descriptors = [
 if submit_button:
     if input_option == "SMILES Input" and smiles:
         try:
-            st.markdown("Processing SMILES input...", unsafe_allow_html=True, css_classes=['process-text'])
+            st.markdown('<div class="process-text">Processing SMILES input...</div>', unsafe_allow_html=True)
             mol = Chem.MolFromSmiles(smiles)
             if mol:
                 AllChem.AddHs(mol)
@@ -100,7 +100,7 @@ if submit_button:
 
     elif input_option == "SDF File Upload" and uploaded_file:
         try:
-            st.markdown("Processing SDF file...", unsafe_allow_html=True, css_classes=['process-text'])
+            st.markdown('<div class="process-text">Processing SDF file...</div>', unsafe_allow_html=True)
             with tempfile.NamedTemporaryFile(delete=False, suffix=".sdf") as temp_file:
                 temp_file.write(uploaded_file.getbuffer())
                 temp_filename = temp_file.name
@@ -139,7 +139,7 @@ if submit_button and mols:
                 rdkit_desc_dict = {name: func(mol) for name, func in rdkit_selected.items()}
                 rdkit_desc_df = pd.DataFrame([rdkit_desc_dict])
                 mol_weight = rdkit_desc_dict.get("MolWt", "N/A")
-                st.markdown(f"Molecular Weight: {mol_weight:.2f} g/mol", unsafe_allow_html=True, css_classes=['molecular-weight'])
+                st.markdown(f'<div class="molecular-weight">Molecular Weight: {mol_weight:.2f} g/mol</div>', unsafe_allow_html=True)
                 mordred_desc_df = calc.pandas([mol])
                 combined_descriptors = mordred_desc_df.join(rdkit_desc_df)
                 molecular_descriptor.append(combined_descriptors)
