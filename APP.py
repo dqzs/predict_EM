@@ -149,7 +149,7 @@ if submit_button and mols:
             model_options = [
                 "WeightedEnsemble_L2", "CatBoost_BAG_L1", "LightGBMLarge_BAG_L1", "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "NeuralNetTorch_BAG_L1"
             ]
-           predictions_dict = {}
+            predictions_dict = {}
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
                 predictions_dict[model] = predictions.astype(str).apply(lambda x: f"{x} nm")
