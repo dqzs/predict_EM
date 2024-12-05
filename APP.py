@@ -43,7 +43,7 @@ st.markdown(
         color: #333;
     }
     .dataframe-container {
-        margin-bottom: -50px; /* 减少数据表和下方内容的间距 */
+        margin-bottom: -2000px; /* 减少数据表和下方内容的间距 */
     }
     .css-15tx938.e16nr0p30 { /* 修正 Streamlit 自动生成的Dataframe间距 */
         padding: 0px;
