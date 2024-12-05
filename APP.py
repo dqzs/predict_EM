@@ -49,8 +49,7 @@ st.markdown(
     }
     /* 设置最大高度和允许滚动 */
     .rounded-container {
-       
-        overflow-y: auto;  /* 启用垂直滚动条 */
+        max-height: 80vh;  /* 限制最大高度为80%视口高度 */
     }
     </style>
     """,
