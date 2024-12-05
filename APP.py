@@ -149,13 +149,26 @@ if submit_button and mols:
             model_options = [
                 "WeightedEnsemble_L2", "CatBoost_BAG_L1", "LightGBMLarge_BAG_L1", "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "NeuralNetTorch_BAG_L1"
             ]
-            predictions_dict = {}
+           predictions_dict = {}
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
-                predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
+                predictions_dict[model] = predictions.astype(str).apply(lambda x: f"{x} nm")
             st.write("Prediction results from all models:")
-            results_df = pd.DataFrame(predictions_dict)
-            st.markdown(results_df.to_html(index=False), unsafe_allow_html=True)  # 使用 to_html 方法并传递 index=False 参数
-            st.markdown("*Note: The 'WeightedEnsemble_L2' column represents the ensemble prediction of the other models using AutoGluon.*", unsafe_allow_html=True)
+
+            # 将模型分成两行，每行三个
+            models_per_row = 3
+            rows = [model_options[i:i + models_per_row] for i in range(0, len(model_options), models_per_row)]
+
+            for i, row in enumerate(rows):
+                with st.container():
+                    if i == 0:
+                        st.subheader("First Row")
+                    elif i == 1:
+                        st.subheader("Second Row")
+                with st.columns(models_per_row):
+                    for model in row:
+                        col_pred = predictions_dict[model]
+                        st.write(f"{model}: {col_pred.values[0]}")
+
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
