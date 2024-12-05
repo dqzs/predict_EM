@@ -19,7 +19,7 @@ st.markdown(
     padding-bottom: 0px; /* 减少底部的间距 */
     }
     .dataframe-container {
-        margin-bottom: 0px; /* 减少表格和底部内容的间距 */
+        margin-bottom: -80px; /* 减少表格和底部内容的间距 */
     }
     .rounded-container h2 {
         margin-top: -80px;
