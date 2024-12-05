@@ -154,7 +154,7 @@ if submit_button and mols:
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
-            st.write("Prediction results from all models:")
+            st.write("Prediction results from various models:")
             results_df = pd.DataFrame(predictions_dict)
             results_df["Molecule Index"] = range(len(mols))
             results_df = results_df[["Molecule Index"] + model_options]
