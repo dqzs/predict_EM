@@ -16,6 +16,7 @@ st.markdown(
         margin: 50px auto ;
         max-width: 39%;
         background-color: #f9f9f9f9;
+        padding-bottom: 2px; /* 将底部内边距设置为 2px */
     }
     .rounded-container h2 {
         margin-top: -80px;
@@ -40,6 +41,9 @@ st.markdown(
         font-family: Arial, sans-serif;
         font-size: 16px;
         color: #333;
+    }
+    .stDataFrame {
+        margin-bottom: 2px !important; /* 调整 DataFrame 和大容器的底部间距 */
     }
     </style>
     """,
