@@ -152,23 +152,10 @@ if submit_button and mols:
             predictions_dict = {}
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
-                predictions_dict[model] = predictions.astype(str).apply(lambda x: f"{x} nm")
+                predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
             st.write("Prediction results from all models:")
-
-            # 将模型分成两行，每行三个
-            models_per_row = 3
-            rows = [model_options[i:i + models_per_row] for i in range(0, len(model_options), models_per_row)]
-
-            for i, row in enumerate(rows):
-                with st.container():
-                    if i == 0:
-                        st.subheader("First Row")
-                    elif i == 1:
-                        st.subheader("Second Row")
-                with st.columns(models_per_row):
-                    for model in row:
-                        col_pred = predictions_dict[model]
-                        st.write(f"{model}: {col_pred.values[0]}")
-
+            results_df = pd.DataFrame(predictions_dict)
+            st.dataframe(results_df)
+            st.markdown("*Note: The 'WeightedEnsemble_L2' column represents the ensemble prediction of the other models using AutoGluon.*", unsafe_allow_html=True)
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
