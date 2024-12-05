@@ -18,16 +18,9 @@ st.markdown(
         background-color: #f9f9f9f9;
         padding-bottom: 0px; /* 将底部内边距设置为 2px */
     }
-    .rounded-container h2 {
-        margin-top: -80px;
-        text-align: center;
-        background-color: #e0e0e0e0;
-        padding: 10px;
-        border-radius: 10px;
-    }
     .rounded-container blockquote {
         text-align: left;
-        margin: 20px auto;
+        margin: 10px auto; /* 减少上下间距 */
         background-color: #f0f0f0;
         padding: 10px;
         font-size: 1.1em;
@@ -41,9 +34,14 @@ st.markdown(
         font-family: Arial, sans-serif;
         font-size: 16px;
         color: #333;
+        margin: 10px 0; /* 统一上下间距 */
     }
     .stDataFrame {
-        margin-bottom: -200px !important; /* 调整 DataFrame 和大容器的底部间距 */
+        margin-bottom: -50px !important; /* 减小 DataFrame 下方空白 */
+    }
+    .stButton > button {
+        margin: 10px auto; /* 调整按钮位置 */
+        display: block; /* 居中按钮 */
     }
     </style>
     """,
