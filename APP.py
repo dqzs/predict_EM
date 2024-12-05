@@ -13,11 +13,11 @@ st.markdown(
     .stApp {
         border: 2px solid #808080;
         border-radius: 20px;
-        margin: 50px auto ;
-        max-width: 39%;
+        margin: 50px auto;
+        max-width: 800px; /* 设置最大宽度 */
         background-color: #f9f9f9f9;
-        padding: 0px; /* 增加内边距，减少空白 */
-        box-sizing: border-box; /* 确保内边距不影响总宽度 */
+        padding: 20px; /* 增加内边距 */
+        box-sizing: border-box;
     }
     .rounded-container h2 {
         margin-top: -80px;
@@ -56,12 +56,11 @@ st.markdown(
 st.markdown(
     """
     <div class='rounded-container'>
-        <h2>Predict Organic Fluorescence <br>
-        Emission Wavelengths</h2>
+        <h2>Predict Organic Fluorescence <br>Emission Wavelengths</h2>
         <blockquote>
             1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
             2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
-            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction&#39;   target='_blank'>GitHub</a>. 
+            3. Code and data are available at <a href='https://github.com/dqzs/Fluorescence-Emission-Wavelength-Prediction' target='_blank'>GitHub</a>.
         </blockquote>
     </div>
     """,
@@ -80,9 +79,6 @@ if input_option == "SMILES Input":
 elif input_option == "SDF File Upload":
     uploaded_file = st.file_uploader("Upload an SDF file", type=["sdf"])
 
-
-
-
 # 提交按钮
 submit_button = st.button("Submit and Predict", key="predict_button")
 
@@ -94,38 +90,39 @@ required_descriptors = [
 
 # 如果点击提交按钮
 if submit_button:
-    if input_option == "SMILES Input" and smiles:
-        try:
-            st.markdown('<div class="process-text">Processing SMILES input...</div>', unsafe_allow_html=True)
-            mol = Chem.MolFromSmiles(smiles)
-            if mol:
-                AllChem.AddHs(mol)
-                AllChem.EmbedMolecule(mol)  # 使用 ETKDG 算法
-                mols.append(mol)
-            else:
-                st.error("Invalid SMILES input. Please check the format.")
-        except Exception as e:
-            st.error(f"An error occurred while processing SMILES: {e}")
-
-    elif input_option == "SDF File Upload" and uploaded_file:
-        try:
-            st.markdown('<div class="process-text">Processing SDF file...</div>', unsafe_allow_html=True)
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".sdf") as temp_file:
-                temp_file.write(uploaded_file.getbuffer())
-                temp_filename = temp_file.name
-
-            supplier = Chem.SDMolSupplier(temp_filename)
-            for mol in supplier:
-                if mol is not None:
+    with st.container():  # 使用容器来限制宽度
+        if input_option == "SMILES Input" and smiles:
+            try:
+                st.markdown('<div class="process-text">Processing SMILES input...</div>', unsafe_allow_html=True)
+                mol = Chem.MolFromSmiles(smiles)
+                if mol:
+                    AllChem.AddHs(mol)
+                    AllChem.EmbedMolecule(mol)  # 使用 ETKDG 算法
                     mols.append(mol)
-                    break  # 仅加载第一个分子
+                else:
+                    st.error("Invalid SMILES input. Please check the format.")
+            except Exception as e:
+                st.error(f"An error occurred while processing SMILES: {e}")
 
-            if len(mols) > 0:
-                st.success("File uploaded successfully, containing 1 valid molecule!")
-            else:
-                st.error("No valid molecule found in the SDF file!")
-        except Exception as e:
-            st.error(f"An error occurred while processing the SDF file: {e}")
+        elif input_option == "SDF File Upload" and uploaded_file:
+            try:
+                st.markdown('<div class="process-text">Processing SDF file...</div>', unsafe_allow_html=True)
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".sdf") as temp_file:
+                    temp_file.write(uploaded_file.getbuffer())
+                    temp_filename = temp_file.name
+
+                supplier = Chem.SDMolSupplier(temp_filename)
+                for mol in supplier:
+                    if mol is not None:
+                        mols.append(mol)
+                        break  # 仅加载第一个分子
+
+                if len(mols) > 0:
+                    st.success("File uploaded successfully, containing 1 valid molecule!")
+                else:
+                    st.error("No valid molecule found in the SDF file!")
+            except Exception as e:
+                st.error(f"An error occurred while processing the SDF file: {e}")
 
 # 如果点击提交按钮且存在有效分子
 if submit_button and mols:
