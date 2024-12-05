@@ -45,7 +45,8 @@ st.markdown(
 st.markdown(
     """
     <div class='rounded-container'>
-        <h2>Predict Organic Fluorescence Emission Wavelengths</h2>
+        <h2>Predict Organic Fluorescence <br>
+        Emission Wavelengths</h2>
         <blockquote>
             1. This website aims to quickly predict the emission wavelength of organic molecules based on their structure (SMILES or SDF files) using machine learning models.<br>
             2. It is recommended to use ChemDraw software to draw the molecular structure and convert it to sdf.<br>
