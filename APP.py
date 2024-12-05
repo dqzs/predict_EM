@@ -145,6 +145,7 @@ if submit_button and mols:
                 molecular_descriptor.append(combined_descriptors)
             result_df = pd.concat(molecular_descriptor, ignore_index=True)
             st.info("Loading the model and predicting the emission wavelength, please wait...")
+            # 加载模型并进行预测
             predictor = TabularPredictor.load("ag-20241119_124834")
             model_options = [
                 "WeightedEnsemble_L2", "CatBoost_BAG_L1", "LightGBMLarge_BAG_L1", "LightGBM_BAG_L1", "LightGBMXT_BAG_L1", "NeuralNetTorch_BAG_L1"
@@ -153,8 +154,13 @@ if submit_button and mols:
             for model in model_options:
                 predictions = predictor.predict(result_df, model=model)
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
-            st.write("Prediction results from all models:")
+
+            # 创建结果DataFrame，排除第一列（索引列）
             results_df = pd.DataFrame(predictions_dict)
+            # 重置索引，这样原来的索引列就不会显示在结果中
+            results_df.reset_index(drop=True, inplace=True)
+
+            st.write("Prediction results from all models:")
             st.dataframe(results_df)
             st.markdown("*Note: The 'WeightedEnsemble_L2' column represents the ensemble prediction of the other models using AutoGluon.*", unsafe_allow_html=True)
         except Exception as e:
