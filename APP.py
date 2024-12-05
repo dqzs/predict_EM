@@ -15,11 +15,8 @@ st.markdown(
         border-radius: 20px;
         margin: 50px auto ;
         max-width: 39%;
-        max-height: 80%;
-        overflow: hidden;
         background-color: #f9f9f9f9;
-        justify-content: flex-start; /* 内容从上向下排列 */
-        padding: 20px; /* 增加容器内边距 */
+        padding-bottom: 2px; /* 将底部内边距设置为 2px */
     }
     .rounded-container h2 {
         margin-top: -80px;
