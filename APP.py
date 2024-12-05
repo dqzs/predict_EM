@@ -47,7 +47,7 @@ st.markdown(
     }
     .css-15tx938.e16nr0p30 { /* 修正 Streamlit 自动生成的Dataframe间距 */
         padding: 0px;
-        margin: 0px 0px -50px;
+        margin: 0px 0px -0px;
     }
     </style>
     """,
