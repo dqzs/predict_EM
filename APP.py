@@ -13,7 +13,7 @@ st.markdown(
     .stApp {
         border: 2px solid #808080;
         border-radius: 20px;
-        margin: 50px auto ;
+        margin: 30px auto ;
         max-width: 39%;
         background-color: #f9f9f9f9;
     }
