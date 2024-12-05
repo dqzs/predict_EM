@@ -155,7 +155,7 @@ if submit_button and mols:
                 predictions_dict[model] = predictions.astype(int).apply(lambda x: f"{x} nm")
             st.write("Prediction results from all models:")
             results_df = pd.DataFrame(predictions_dict)
-            st.dataframe(results_df)
+            st.dataframe(results_df.iloc[:,1:])
             st.markdown("*Note: The 'WeightedEnsemble_L2' column represents the ensemble prediction of the other models using AutoGluon.*", unsafe_allow_html=True)
         except Exception as e:
             st.error(f"An error occurred during molecular descriptor calculation or prediction: {e}")
