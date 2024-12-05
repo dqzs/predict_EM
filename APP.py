@@ -80,6 +80,11 @@ if input_option == "SMILES Input":
 elif input_option == "SDF File Upload":
     uploaded_file = st.file_uploader("Upload an SDF file", type=["sdf"])
 
+# 添加滑动条来控制最大值
+max_value = 500  # 设置滑动条的最大值
+slider_value = st.slider("Adjust Maximum Value", min_value=0, max_value=max_value, value=max_value)
+
+
 # 提交按钮
 submit_button = st.button("Submit and Predict", key="predict_button")
 
