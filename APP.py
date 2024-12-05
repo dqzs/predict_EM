@@ -47,6 +47,11 @@ st.markdown(
         margin-top: 10px;
         margin-bottom: 0px !important;
     }
+    /* 设置最大高度和允许滚动 */
+    .rounded-container {
+        max-height: 80vh;  /* 限制最大高度为80%视口高度 */
+        overflow-y: auto;  /* 启用垂直滚动条 */
+    }
     </style>
     """,
     unsafe_allow_html=True,
