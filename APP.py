@@ -13,10 +13,10 @@ st.markdown(
     .stApp {
         border: 2px solid #808080;
         border-radius: 20px;
-        margin: 50px auto ;
+        margin: 50px auto -50px;
         max-width: 39%;
         background-color: #f9f9f9f9;
-        padding: -1000px; /* 增加内边距，减少空白 */
+        padding: 0px; /* 增加内边距，减少空白 */
         box-sizing: border-box; /* 确保内边距不影响总宽度 */
     }
     .rounded-container h2 {
