@@ -19,6 +19,12 @@ st.markdown(
         padding: 20px; /* 增加内边距 */
         box-sizing: border-box;
     }
+    @media (max-width: 768px) {
+    .stApp {
+    margin-top: 45px; / 在小屏幕上减少顶部外边距 /
+    max-width: 95%; / 在小屏幕上使用全宽 */
+    }
+    }
     .rounded-container h2 {
         margin-top: -80px;
         text-align: center;
