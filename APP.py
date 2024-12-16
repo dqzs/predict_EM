@@ -51,7 +51,7 @@ st.markdown(
     @media (max-width: 768px) {
         .stApp {
             margin-top: 45px; / 在小屏幕上减少顶部外边距 /
-            max-width: 95%; / 在小屏幕上使用全宽 */
+            max-width: 99%; / 在小屏幕上使用全宽 */
         }
     }
     </style>
