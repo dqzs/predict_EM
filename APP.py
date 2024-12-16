@@ -47,6 +47,21 @@ st.markdown(
         margin-top: 10px;
         margin-bottom: 0px !important;
     }
+     /* 针对小屏幕的优化 */
+    @media (max-width: 768px) {
+        .stApp {
+            padding: 5px;
+        }
+        .rounded-container h2 {
+            font-size: 1.2em; /* 缩小标题字体 */
+        }
+        .rounded-container blockquote {
+            font-size: 0.9em; /* 缩小引用块字体 */
+        }
+        .process-text, .molecular-weight {
+            font-size: 12px; /* 缩小文本字体 */
+        }
+    }
     </style>
     """,
     unsafe_allow_html=True,
