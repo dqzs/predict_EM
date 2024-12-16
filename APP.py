@@ -59,7 +59,7 @@ st.markdown(
             font-size: 1.2em; /* 调整标题字体大小 */
         }
         .stApp {
-            padding: 5px !important; /* 减少内边距 */
+            padding: 1px !important; /* 减少内边距 */
             max-width: 99%; /* 设置最大宽度 */
         }
         .process-text, .molecular-weight {
