@@ -49,9 +49,21 @@ st.markdown(
     }
      /* 针对小屏幕的优化 */
     @media (max-width: 768px) {
+        .rounded-container {
+            padding: 10px; /* 减少内边距 */
+        }
+        .rounded-container blockquote {
+            font-size: 0.9em; /* 缩小字体 */
+        }
+        .rounded-container h2 {
+            font-size: 1.2em; /* 调整标题字体大小 */
+        }
         .stApp {
-            margin-top: 45px; / 在小屏幕上减少顶部外边距 /
-            max-width: 99%; / 在小屏幕上使用全宽 */
+            margin: 0 !important; /* 移除外边距 */
+            padding: 5px !important; /* 减少内边距 */
+        }
+        .process-text, .molecular-weight {
+            font-size: 0.9em; /* 缩小文本字体 */
         }
     }
     </style>
